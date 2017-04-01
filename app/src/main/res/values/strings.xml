@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Communication</string>
+
+    <string name="loading">正在加载中...</string>
+    <string name="load_failed">加载失败，请点我重试</string>
+    <string name="load_end">没有更多数据</string>
+    <string name="invalid_password">无效密码</string>
+
+    <string name="hint_login_username">请输入手机号码</string>
+    <string name="hint_login_password">输入密码</string>
+    <string name="login">登录</string>
+    <string name="forget_pwd">忘记密码</string>
+    <string name="please_input_limit_pwd">请输入数字或字母</string>
+
+    <string name="msg_operation_canceled">"操作被取消"</string>
+    <string name="tip_permission_camera">没有使用相机的权限，请在权限管理中开启</string>
+    <string name="tip_permission_storage">没有使用SD卡的权限，请在权限管理中开启</string>
+    <string name="tip_permission_camera_storage">没有使用相机和SD卡的权限，请在权限管理中开启</string>
+
+    <string name="permission_cancel">取消</string>
+    <string name="permission_setting">去设置</string>
+    <string name="permission_title_permission_failed">权限申请失败</string>
+    <string name="permission_message_permission_failed">我们需要的一些权限被您拒绝或者系统发生错误申请失败，请您到设置页面手动授权，否则功能无法正常使用！</string>
+    <string name="permission_resume">继续</string>
+    <string name="permission_title_permission_rationale">权限已被拒绝</string>
+    <string name="permission_message_permission_rationale">您已经拒绝过我们申请授权，请您同意授权，否则功能无法正常使用！</string>
+</resources>

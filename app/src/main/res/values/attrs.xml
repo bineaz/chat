@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <declare-styleable name="DrawableTextView">
+        <attr name="dt_touchSolidColor" format="color"/>
+        <attr name="dt_solidColor" format="color"/>
+        <attr name="dt_cornerRadius" format="dimension"/>
+        <attr name="dt_topLeftRadius" format="dimension"/>
+        <attr name="dt_topRightRadius" format="dimension"/>
+        <attr name="dt_bottomLeftRadius" format="dimension"/>
+        <attr name="dt_bottomRightRadius" format="dimension"/>
+        <attr name="dt_stroke_Width" format="dimension"/>
+        <attr name="dt_stroke_Color" format="color"/>
+        <attr name="dt_strokeDashWidth" format="dimension"/>
+        <attr name="dt_strokeDashGap" format="dimension"/>
+        <attr name="dt_gradientStartColor" format="color"/>
+        <attr name="dt_gradientEndColor" format="color"/>
+        <attr name="dt_gradientCenterColor" format="color"/>
+        <attr name="dt_gradientUseLevel" format="boolean"/>
+        <attr name="dt_gradientAngle" format="dimension"/>
+        <attr name="dt_gradientOrientation">
+            <enum name="BL_TR" value="0"/>
+            <enum name="BOTTOM_TOP" value="1"/>
+            <enum name="BR_TL" value="2"/>
+            <enum name="LEFT_RIGHT" value="3"/>
+            <enum name="RIGHT_LEFT" value="4"/>
+            <enum name="TL_BR" value="5"/>
+            <enum name="TOP_BOTTOM" value="6"/>
+            <enum name="TR_BL" value="7"/>
+        </attr>
+        <attr name="dt_shapeType">
+            <enum name="RECTANGLE" value="0"/>
+            <enum name="OVAL" value="1"/>
+            <enum name="LINE" value="2"/>
+            <enum name="RING" value="3"/>
+        </attr>
+        <attr name="dt_gradientType">
+            <enum name="LINEAR" value="0"/>
+            <enum name="RADIAL" value="1"/>
+            <enum name="SWEEP" value="2"/>
+        </attr>
+        <attr name="dt_gradient_radius" format="dimension"/>
+        <attr name="dt_gradientLeft" format="dimension"/>
+        <attr name="dt_gradientTop" format="dimension"/>
+        <attr name="dt_gradientRight" format="dimension"/>
+        <attr name="dt_gradientBottom" format="dimension"/>
+
+        <attr name="dt_shadowColor" format="color"/>
+        <attr name="dt_shadowStartColor" format="color"/>
+        <attr name="dt_shadowCenterColor" format="color"/>
+        <attr name="dt_shadowEndColor" format="color"/>
+        <attr name="dt_shadowOrientation" format="integer"/>
+        <attr name="dt_shadowLeft" format="dimension"/>
+        <attr name="dt_shadowTop" format="dimension"/>
+        <attr name="dt_shadowRight" format="dimension"/>
+        <attr name="dt_shadowBottom" format="dimension"/>
+        <attr name="dt_shadowRadius" format="dimension"/>
+
+        <attr name="dt_drawableWidth" format="dimension"/>
+        <attr name="dt_drawableHeight" format="dimension"/>
+
+        <attr name="dt_drawableRightWidth" format="dimension"/>
+        <attr name="dt_drawableRightHeight" format="dimension"/>
+
+        <attr name="dt_drawableTopWidth" format="dimension"/>
+        <attr name="dt_drawableTopHeight" format="dimension"/>
+
+        <attr name="dt_drawableBottomHeight" format="dimension"/>
+        <attr name="dt_drawableBottomColor" format="color"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="DrawableLinearLayout">
+        <attr name="dl_touchSolidColor" format="color"/>
+        <attr name="dl_solidColor" format="color"/>
+        <attr name="dl_cornerRadius" format="dimension"/>
+        <attr name="dl_topLeftRadius" format="dimension"/>
+        <attr name="dl_topRightRadius" format="dimension"/>
+        <attr name="dl_bottomLeftRadius" format="dimension"/>
+        <attr name="dl_bottomRightRadius" format="dimension"/>
+        <attr name="dl_stroke_Width" format="dimension"/>
+        <attr name="dl_stroke_Color" format="color"/>
+        <attr name="dl_strokeDashWidth" format="dimension"/>
+        <attr name="dl_strokeDashGap" format="dimension"/>
+        <attr name="dl_gradientStartColor" format="color"/>
+        <attr name="dl_gradientEndColor" format="color"/>
+        <attr name="dl_gradientCenterColor" format="color"/>
+        <attr name="dl_gradientUseLevel" format="boolean"/>
+        <attr name="dl_gradientAngle" format="dimension"/>
+        <attr name="dl_gradientOrientation">
+            <enum name="BL_TR" value="0"/>
+            <enum name="BOTTOM_TOP" value="1"/>
+            <enum name="BR_TL" value="2"/>
+            <enum name="LEFT_RIGHT" value="3"/>
+            <enum name="RIGHT_LEFT" value="4"/>
+            <enum name="TL_BR" value="5"/>
+            <enum name="TOP_BOTTOM" value="6"/>
+            <enum name="TR_BL" value="7"/>
+        </attr>
+        <attr name="dl_shapeType">
+            <enum name="RECTANGLE" value="0"/>
+            <enum name="OVAL" value="1"/>
+            <enum name="LINE" value="2"/>
+            <enum name="RING" value="3"/>
+        </attr>
+        <attr name="dl_gradientType">
+            <enum name="LINEAR" value="0"/>
+            <enum name="RADIAL" value="1"/>
+            <enum name="SWEEP" value="2"/>
+        </attr>
+        <attr name="dl_gradient_radius" format="dimension"/>
+        <attr name="dl_gradientLeft" format="dimension"/>
+        <attr name="dl_gradientTop" format="dimension"/>
+        <attr name="dl_gradientRight" format="dimension"/>
+        <attr name="dl_gradientBottom" format="dimension"/>
+        <attr name="dl_gradientBorder" format="dimension"/>
+
+        <attr name="dl_shadowColor" format="color"/>
+        <attr name="dl_shadowStartColor" format="color"/>
+        <attr name="dl_shadowCenterColor" format="color"/>
+        <attr name="dl_shadowEndColor" format="color"/>
+        <attr name="dl_shadowOrientation" format="integer"/>
+        <attr name="dl_shadowLeft" format="dimension"/>
+        <attr name="dl_shadowTop" format="dimension"/>
+        <attr name="dl_shadowRight" format="dimension"/>
+        <attr name="dl_shadowBottom" format="dimension"/>
+        <attr name="dl_shadowRadius" format="dimension"/>
+    </declare-styleable>
+
+</resources>
