@@ -21,6 +21,7 @@ import com.by.communication.entity.Response;
 import com.by.communication.entity.User;
 import com.by.communication.net.okhttp.HttpUtil;
 import com.by.communication.re.UserService;
+import com.by.communication.util.Logger;
 import com.by.communication.util.Util;
 
 import butterknife.BindView;
@@ -276,14 +277,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         UserService userService = retrofit.create(UserService.class);
 
-        Observable<Response<User>> observable = userService.login(et_mobile.getText().toString().trim(), et_mobile.getText().toString().trim(), et_password.getText().toString().trim());
+        String phone = et_mobile.getText().toString().trim();
+        String password = et_password.getText().toString().trim();
+
+
+        Observable<Response<User>> observable = userService.login(phone, password);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Response<User>>() {
                     @Override
                     public void onCompleted()
                     {
-
+                        Logger.e("", "complete");
                     }
 
                     @Override
