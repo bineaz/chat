@@ -30,6 +30,7 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Nickname = new Property(3, String.class, "nickname", false, "NICKNAME");
         public final static Property Avatar = new Property(4, String.class, "avatar", false, "AVATAR");
         public final static Property Phone = new Property(5, String.class, "phone", false, "PHONE");
+        public final static Property Gender = new Property(6, int.class, "gender", false, "GENDER");
     }
 
 
@@ -50,7 +51,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"PASSWORD\" TEXT," + // 2: password
                 "\"NICKNAME\" TEXT," + // 3: nickname
                 "\"AVATAR\" TEXT," + // 4: avatar
-                "\"PHONE\" TEXT);"); // 5: phone
+                "\"PHONE\" TEXT," + // 5: phone
+                "\"GENDER\" INTEGER NOT NULL );"); // 6: gender
     }
 
     /** Drops the underlying database table. */
@@ -88,6 +90,7 @@ public class UserDao extends AbstractDao<User, Long> {
         if (phone != null) {
             stmt.bindString(6, phone);
         }
+        stmt.bindLong(7, entity.getGender());
     }
 
     @Override
@@ -119,6 +122,7 @@ public class UserDao extends AbstractDao<User, Long> {
         if (phone != null) {
             stmt.bindString(6, phone);
         }
+        stmt.bindLong(7, entity.getGender());
     }
 
     @Override
@@ -134,7 +138,8 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // password
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // nickname
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // avatar
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // phone
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // phone
+            cursor.getInt(offset + 6) // gender
         );
         return entity;
     }
@@ -147,6 +152,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setNickname(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setAvatar(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setPhone(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setGender(cursor.getInt(offset + 6));
      }
     
     @Override

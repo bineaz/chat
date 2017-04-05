@@ -25,12 +25,13 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
-        public final static Property Sender_id = new Property(1, long.class, "sender_id", false, "SENDER_ID");
-        public final static Property Receiver_id = new Property(2, long.class, "receiver_id", false, "RECEIVER_ID");
-        public final static Property Content_type = new Property(3, int.class, "content_type", false, "CONTENT_TYPE");
-        public final static Property Content = new Property(4, String.class, "content", false, "CONTENT");
-        public final static Property Visible = new Property(5, boolean.class, "visible", false, "VISIBLE");
-        public final static Property Time_stamp = new Property(6, String.class, "time_stamp", false, "TIME_STAMP");
+        public final static Property Chat_id = new Property(1, long.class, "chat_id", false, "CHAT_ID");
+        public final static Property Sender_id = new Property(2, long.class, "sender_id", false, "SENDER_ID");
+        public final static Property Receiver_id = new Property(3, long.class, "receiver_id", false, "RECEIVER_ID");
+        public final static Property Content_type = new Property(4, int.class, "content_type", false, "CONTENT_TYPE");
+        public final static Property Content = new Property(5, String.class, "content", false, "CONTENT");
+        public final static Property Visible = new Property(6, int.class, "visible", false, "VISIBLE");
+        public final static Property Time_stamp = new Property(7, String.class, "time_stamp", false, "TIME_STAMP");
     }
 
 
@@ -47,12 +48,13 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CHAT_MESSAGE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
-                "\"SENDER_ID\" INTEGER NOT NULL ," + // 1: sender_id
-                "\"RECEIVER_ID\" INTEGER NOT NULL ," + // 2: receiver_id
-                "\"CONTENT_TYPE\" INTEGER NOT NULL ," + // 3: content_type
-                "\"CONTENT\" TEXT," + // 4: content
-                "\"VISIBLE\" INTEGER NOT NULL ," + // 5: visible
-                "\"TIME_STAMP\" TEXT);"); // 6: time_stamp
+                "\"CHAT_ID\" INTEGER NOT NULL ," + // 1: chat_id
+                "\"SENDER_ID\" INTEGER NOT NULL ," + // 2: sender_id
+                "\"RECEIVER_ID\" INTEGER NOT NULL ," + // 3: receiver_id
+                "\"CONTENT_TYPE\" INTEGER NOT NULL ," + // 4: content_type
+                "\"CONTENT\" TEXT," + // 5: content
+                "\"VISIBLE\" INTEGER NOT NULL ," + // 6: visible
+                "\"TIME_STAMP\" TEXT);"); // 7: time_stamp
     }
 
     /** Drops the underlying database table. */
@@ -65,19 +67,20 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     protected final void bindValues(DatabaseStatement stmt, ChatMessage entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
-        stmt.bindLong(2, entity.getSender_id());
-        stmt.bindLong(3, entity.getReceiver_id());
-        stmt.bindLong(4, entity.getContent_type());
+        stmt.bindLong(2, entity.getChat_id());
+        stmt.bindLong(3, entity.getSender_id());
+        stmt.bindLong(4, entity.getReceiver_id());
+        stmt.bindLong(5, entity.getContent_type());
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(5, content);
+            stmt.bindString(6, content);
         }
-        stmt.bindLong(6, entity.getVisible() ? 1L: 0L);
+        stmt.bindLong(7, entity.getVisible());
  
         String time_stamp = entity.getTime_stamp();
         if (time_stamp != null) {
-            stmt.bindString(7, time_stamp);
+            stmt.bindString(8, time_stamp);
         }
     }
 
@@ -85,19 +88,20 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     protected final void bindValues(SQLiteStatement stmt, ChatMessage entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
-        stmt.bindLong(2, entity.getSender_id());
-        stmt.bindLong(3, entity.getReceiver_id());
-        stmt.bindLong(4, entity.getContent_type());
+        stmt.bindLong(2, entity.getChat_id());
+        stmt.bindLong(3, entity.getSender_id());
+        stmt.bindLong(4, entity.getReceiver_id());
+        stmt.bindLong(5, entity.getContent_type());
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(5, content);
+            stmt.bindString(6, content);
         }
-        stmt.bindLong(6, entity.getVisible() ? 1L: 0L);
+        stmt.bindLong(7, entity.getVisible());
  
         String time_stamp = entity.getTime_stamp();
         if (time_stamp != null) {
-            stmt.bindString(7, time_stamp);
+            stmt.bindString(8, time_stamp);
         }
     }
 
@@ -110,12 +114,13 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     public ChatMessage readEntity(Cursor cursor, int offset) {
         ChatMessage entity = new ChatMessage( //
             cursor.getLong(offset + 0), // id
-            cursor.getLong(offset + 1), // sender_id
-            cursor.getLong(offset + 2), // receiver_id
-            cursor.getInt(offset + 3), // content_type
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // content
-            cursor.getShort(offset + 5) != 0, // visible
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // time_stamp
+            cursor.getLong(offset + 1), // chat_id
+            cursor.getLong(offset + 2), // sender_id
+            cursor.getLong(offset + 3), // receiver_id
+            cursor.getInt(offset + 4), // content_type
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // content
+            cursor.getInt(offset + 6), // visible
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // time_stamp
         );
         return entity;
     }
@@ -123,12 +128,13 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     @Override
     public void readEntity(Cursor cursor, ChatMessage entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
-        entity.setSender_id(cursor.getLong(offset + 1));
-        entity.setReceiver_id(cursor.getLong(offset + 2));
-        entity.setContent_type(cursor.getInt(offset + 3));
-        entity.setContent(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setVisible(cursor.getShort(offset + 5) != 0);
-        entity.setTime_stamp(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setChat_id(cursor.getLong(offset + 1));
+        entity.setSender_id(cursor.getLong(offset + 2));
+        entity.setReceiver_id(cursor.getLong(offset + 3));
+        entity.setContent_type(cursor.getInt(offset + 4));
+        entity.setContent(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setVisible(cursor.getInt(offset + 6));
+        entity.setTime_stamp(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override

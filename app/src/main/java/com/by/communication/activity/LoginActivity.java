@@ -2,6 +2,7 @@ package com.by.communication.activity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -16,12 +17,15 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.by.communication.App;
 import com.by.communication.R;
 import com.by.communication.entity.Response;
 import com.by.communication.entity.User;
+import com.by.communication.gen.UserDao;
 import com.by.communication.net.okhttp.HttpUtil;
 import com.by.communication.re.UserService;
 import com.by.communication.util.Logger;
+import com.by.communication.util.Usp;
 import com.by.communication.util.Util;
 
 import butterknife.BindView;
@@ -269,7 +273,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://chat.tangcheng.me/index.php/Chat/")
-                .addConverterFactory(ScalarsConverterFactory.create())
+//                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(HttpUtil.getInstance().getOkHttpClient())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -280,15 +284,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         String phone = et_mobile.getText().toString().trim();
         String password = et_password.getText().toString().trim();
 
+        System.out.println(phone + "  " + password);
 
-        Observable<Response<User>> observable = userService.login(phone, password);
+
+        Observable<Response<User>> observable = userService.login("15757126395", "123");
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Response<User>>() {
                     @Override
                     public void onCompleted()
                     {
-                        Logger.e("", "complete");
+//                        Logger.e("", "complete");
                     }
 
                     @Override
@@ -298,9 +304,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     }
 
                     @Override
-                    public void onNext(Response<User> user)
+                    public void onNext(Response<User> response)
                     {
-                        System.out.println(user.toString());
+                        System.out.println(response.toString());
+
+                        if (response.getCode() == response.CODE_SUCCESS) {
+                            UserDao userDao = App.getInstance().getDaoSession().getUserDao();
+                            userDao.insertOrReplace(response.getData());
+
+                            Usp.getInstance().login(response.getData());
+                            App.getInstance().setUser(response.getData());
+
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        }
+
+
                     }
                 });
     }

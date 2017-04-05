@@ -11,8 +11,10 @@ import android.provider.Settings;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.by.communication.App;
 import com.by.communication.R;
 import com.by.communication.permission.AndPermission;
+import com.by.communication.util.Usp;
 
 import java.util.concurrent.TimeUnit;
 
@@ -53,20 +55,17 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void call(Long aLong)
                     {
-                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+
+                        if (Usp.getInstance().isLoggedIn()) {
+                            App.getInstance().initUser();
+                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        } else {
+                            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        }
+
+                        finish();
                     }
                 });
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run()
-            {
-
-            }
-        }, 200);
-
-
     }
 
     private void requestPermission()

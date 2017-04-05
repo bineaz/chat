@@ -41,4 +41,21 @@
     </style>
 
     <color name="text">#32323d</color>
+    <color name="f5">#F5F5F5</color>
+
+    <style name="listView">
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="ilv_solidColor">@color/f5</item>
+        <item name="ilv_dividerHeight">@dimen/list_divider_height</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="editText" parent="text">
+        <item name="android:textColorHint">@color/color_cccccc</item>
+        <item name="android:layout_gravity">left|center_vertical</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:background">@null</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
 </resources>

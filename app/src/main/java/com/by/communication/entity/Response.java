@@ -5,6 +5,7 @@ package com.by.communication.entity;
  */
 
 public class Response<T> {
+    public static final int CODE_SUCCESS = 200;
     private int    code;
     private String info;
     T data;

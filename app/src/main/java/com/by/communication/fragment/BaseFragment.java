@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Produced a lot of bug on 2017/3/30.
  */
@@ -22,6 +25,8 @@ public abstract class BaseFragment extends Fragment {
     //当前activity实例，防止getActivity返回null
     private Activity activity;
 
+    Unbinder unbinder;
+
 
     @Nullable
     @Override
@@ -33,6 +38,7 @@ public abstract class BaseFragment extends Fragment {
         view = inflater.inflate(getResId(), null);
         view.setClickable(true);   //防止点击到下层界面
 
+        unbinder = ButterKnife.bind(this, view);
         init(view);
 
         return view;
@@ -53,5 +59,12 @@ public abstract class BaseFragment extends Fragment {
     public LayoutInflater getInflater()
     {
         return inflater;
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

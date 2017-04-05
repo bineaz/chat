@@ -4,8 +4,11 @@ import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDexApplication;
 
+import com.by.communication.entity.User;
 import com.by.communication.gen.DaoMaster;
 import com.by.communication.gen.DaoSession;
+import com.by.communication.gen.UserDao;
+import com.by.communication.util.Usp;
 
 /**
  * Produced a lot of bug on 2017/4/1.
@@ -19,6 +22,8 @@ public class App extends MultiDexApplication {
     private DaoSession              mDaoSession;
 
     private static App instance;
+
+    private User user;
 
     @Override
     public void onCreate()
@@ -58,5 +63,21 @@ public class App extends MultiDexApplication {
     public SQLiteDatabase getDb()
     {
         return db;
+    }
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
+
+    public void initUser()
+    {
+        UserDao userDao = mDaoSession.getUserDao();
+        user = userDao.load(Usp.getInstance().getUserId());
     }
 }

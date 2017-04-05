@@ -5,4 +5,5 @@
     <dimen name="dp_40">40dp</dimen>
 
     <dimen name="sp_14">14sp</dimen>
+    <dimen name="list_divider_height">0.7dp</dimen>
 </resources>

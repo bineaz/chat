@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
@@ -14,8 +15,33 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorAccent">
+        android:layout_height="50dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_divider_height"
+            android:background="@color/color_cccccc"/>
+
+        <EditText
+            android:id="@+id/chatActivity_editText"
+            style="@style/editText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"/>
+
+        <com.by.communication.widgit.textView.DrawableTextView
+            android:id="@+id/chatActivity_sendTextView"
+            style="@style/textSmall"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="@string/send"
+            android:textColor="@color/white"
+            app:dt_solidColor="@color/colorAccent"
+            app:dt_touchSolidColor="@color/colorAccent"/>
+
 
     </RelativeLayout>
 

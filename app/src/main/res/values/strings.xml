@@ -24,4 +24,10 @@
     <string name="permission_resume">继续</string>
     <string name="permission_title_permission_rationale">权限已被拒绝</string>
     <string name="permission_message_permission_rationale">您已经拒绝过我们申请授权，请您同意授权，否则功能无法正常使用！</string>
+    <string name="name">姓名</string>
+    <string name="message">这是一条记录</string>
+    <string name="time_stamp">2017-17-17</string>
+    <string name="chat">聊天</string>
+    <string name="friend">好友</string>
+    <string name="send">发送</string>
 </resources>

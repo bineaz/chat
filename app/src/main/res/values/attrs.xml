@@ -128,4 +128,16 @@
         <attr name="dl_shadowRadius" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="InsetListView">
+        <attr name="ilv_solidColor" format="reference" />
+        <attr name="ilv_insetLeft" format="dimension" />
+        <attr name="ilv_insetRight" format="dimension" />
+        <attr name="ilv_insetTop" format="dimension" />
+        <attr name="ilv_insetBottom" format="dimension" />
+        <attr name="ilv_dividerHeight" format="dimension" />
+        <attr name="ilv_loadingView" format="reference" />
+        <attr name="ilv_emptyView" format="reference" />
+        <attr name="ilv_errorView" format="reference" />
+    </declare-styleable>
+
 </resources>
