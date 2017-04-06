@@ -21,8 +21,16 @@ public interface ChatService {
     @GET("getChatHistory/{user_id}/{last_message_id}")
     Observable<Response<List<ChatMessage>>> getChatMessageHistory(@Path("user_id") long user_id, @Path("last_message_id") long last_message_id);
 
+//    @POST("sendMessage")
+//    @FormUrlEncoded
+//    Observable<Response<ChatMessage>> sendMessage(
+//            @Field("sender_id") long sender_id, @Field("chat_id") long chat_id,
+//            @Field("content_type") int content_type, @Field("content") String content,
+//            @Field("users") String users);
+
     @POST("sendMessage")
     @FormUrlEncoded
-    Observable<Response<ChatMessage>> sendMessage(@Field("sender_id") long sender_id, @Field("chat_id") long chat_id,
-                                                  @Field("content_type") int content_type, @Field("content") String content);
+    Observable<Response<ChatMessage>> sendMessage(
+            @Field("sender_id") long sender_id, @Field("receiver_id") long receiver_id,
+            @Field("content_type") int content_type, @Field("content") String content);
 }

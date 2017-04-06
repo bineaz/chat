@@ -1,6 +1,8 @@
 package com.by.communication.net.okhttp.builder;
 
 import com.by.communication.net.okhttp.request.RequestCall;
+import com.by.communication.util.ConstantUtil;
+import com.by.communication.util.Logger;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,13 +10,12 @@ import java.util.Map;
 /**
  * Created by zhy on 15/12/14.
  */
-public abstract class OkHttpRequestBuilder<T extends OkHttpRequestBuilder>
-{
-    protected String url;
-    protected Object tag;
+public abstract class OkHttpRequestBuilder<T extends OkHttpRequestBuilder> {
+    protected String              url;
+    protected Object              tag;
     protected Map<String, String> headers;
     protected Map<String, String> params;
-    protected int id;
+    protected int                 id;
 
     public T id(int id)
     {
@@ -23,6 +24,15 @@ public abstract class OkHttpRequestBuilder<T extends OkHttpRequestBuilder>
     }
 
     public T url(String url)
+    {
+        this.url = ConstantUtil.BASE_URL + url;
+
+        Logger.e("url", this.url);
+
+        return (T) this;
+    }
+
+    public T rawUrl(String url)
     {
         this.url = url;
         return (T) this;
@@ -43,8 +53,7 @@ public abstract class OkHttpRequestBuilder<T extends OkHttpRequestBuilder>
 
     public T addHeader(String key, String val)
     {
-        if (this.headers == null)
-        {
+        if (this.headers == null) {
             headers = new LinkedHashMap<>();
         }
         headers.put(key, val);

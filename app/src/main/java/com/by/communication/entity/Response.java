@@ -49,4 +49,9 @@ public class Response<T> {
                 ", data=" + data +
                 '}';
     }
+
+    public boolean isSuccess()
+    {
+        return code == CODE_SUCCESS;
+    }
 }

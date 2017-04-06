@@ -31,7 +31,8 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         public final static Property Content_type = new Property(4, int.class, "content_type", false, "CONTENT_TYPE");
         public final static Property Content = new Property(5, String.class, "content", false, "CONTENT");
         public final static Property Visible = new Property(6, int.class, "visible", false, "VISIBLE");
-        public final static Property Time_stamp = new Property(7, String.class, "time_stamp", false, "TIME_STAMP");
+        public final static Property Timestamp = new Property(7, String.class, "timestamp", false, "TIMESTAMP");
+        public final static Property Status = new Property(8, int.class, "status", false, "STATUS");
     }
 
 
@@ -54,7 +55,8 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
                 "\"CONTENT_TYPE\" INTEGER NOT NULL ," + // 4: content_type
                 "\"CONTENT\" TEXT," + // 5: content
                 "\"VISIBLE\" INTEGER NOT NULL ," + // 6: visible
-                "\"TIME_STAMP\" TEXT);"); // 7: time_stamp
+                "\"TIMESTAMP\" TEXT," + // 7: timestamp
+                "\"STATUS\" INTEGER NOT NULL );"); // 8: status
     }
 
     /** Drops the underlying database table. */
@@ -78,10 +80,11 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         }
         stmt.bindLong(7, entity.getVisible());
  
-        String time_stamp = entity.getTime_stamp();
-        if (time_stamp != null) {
-            stmt.bindString(8, time_stamp);
+        String timestamp = entity.getTimestamp();
+        if (timestamp != null) {
+            stmt.bindString(8, timestamp);
         }
+        stmt.bindLong(9, entity.getStatus());
     }
 
     @Override
@@ -99,10 +102,11 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         }
         stmt.bindLong(7, entity.getVisible());
  
-        String time_stamp = entity.getTime_stamp();
-        if (time_stamp != null) {
-            stmt.bindString(8, time_stamp);
+        String timestamp = entity.getTimestamp();
+        if (timestamp != null) {
+            stmt.bindString(8, timestamp);
         }
+        stmt.bindLong(9, entity.getStatus());
     }
 
     @Override
@@ -120,7 +124,8 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
             cursor.getInt(offset + 4), // content_type
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // content
             cursor.getInt(offset + 6), // visible
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // time_stamp
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // timestamp
+            cursor.getInt(offset + 8) // status
         );
         return entity;
     }
@@ -134,7 +139,8 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         entity.setContent_type(cursor.getInt(offset + 4));
         entity.setContent(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setVisible(cursor.getInt(offset + 6));
-        entity.setTime_stamp(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setTimestamp(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setStatus(cursor.getInt(offset + 8));
      }
     
     @Override

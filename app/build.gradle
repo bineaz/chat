@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 // In your app projects build.gradle file:
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 24

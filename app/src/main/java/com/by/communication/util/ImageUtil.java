@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 
 public class ImageUtil {
 
-    public static void displayAvatar(Context context, ImageView imageView, int user_id)
+    public static void displayAvatar(Context context, ImageView imageView, long user_id)
     {
         Picasso.with(context).load(R.mipmap.icon).into(imageView);
     }

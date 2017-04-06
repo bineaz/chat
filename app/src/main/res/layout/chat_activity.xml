@@ -5,13 +5,20 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chat_recyclerView"
+    <com.by.communication.widgit.layout.MyLinearLayout
+        android:id="@+id/chatActivity_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chat_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </com.by.communication.widgit.layout.MyLinearLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,7 +46,7 @@
             android:layout_alignParentRight="true"
             android:text="@string/send"
             android:textColor="@color/white"
-            app:dt_solidColor="@color/colorAccent"
+            app:dt_solidColor="@color/colorAccentLight"
             app:dt_touchSolidColor="@color/colorAccent"/>
 
 

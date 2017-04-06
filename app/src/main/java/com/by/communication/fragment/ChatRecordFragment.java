@@ -132,7 +132,7 @@ public class ChatRecordFragment extends BaseFragment {
             TextView nameTextView = holder.getView(R.id.chatRecordItem_nameTextView);
             TextView messageTextView = holder.getView(R.id.chatRecordItem_messageTextView);
 
-            timeTextView.setText(data.getLast_chat_message().getTime_stamp());
+            timeTextView.setText(data.getLast_chat_message().getTimestamp());
             nameTextView.setText(data.getChat_id() + "");
             messageTextView.setText(data.getLast_chat_message().getContent());
             ImageUtil.displayAvatar(getActivity(), avatar, 1);
