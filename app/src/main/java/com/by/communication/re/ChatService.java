@@ -5,12 +5,18 @@ import com.by.communication.entity.Response;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -28,9 +34,17 @@ public interface ChatService {
 //            @Field("content_type") int content_type, @Field("content") String content,
 //            @Field("users") String users);
 
+//    @POST("sendMessage")
+//    @Multipart
+//    Observable<Response<ChatMessage>> sendMessage(
+//            @Part("sender_id") long sender_id, @Part("receiver_id") long receiver_id,
+//            @Part("content_type") int content_type, @Part("content") RequestBody content,
+//            @Part MultipartBody.Part file);
+
     @POST("sendMessage")
-    @FormUrlEncoded
+    @Multipart
     Observable<Response<ChatMessage>> sendMessage(
-            @Field("sender_id") long sender_id, @Field("receiver_id") long receiver_id,
-            @Field("content_type") int content_type, @Field("content") String content);
+            @Part("sender_id") long sender_id, @Part("receiver_id") long receiver_id,
+            @Part("content_type") int content_type, @Part("content") RequestBody content,
+            @Part MultipartBody.Part file);
 }

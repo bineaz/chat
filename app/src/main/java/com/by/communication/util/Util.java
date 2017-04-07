@@ -2,13 +2,25 @@ package com.by.communication.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.by.communication.App;
+
+import org.greenrobot.greendao.AbstractDao;
+import org.greenrobot.greendao.Property;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * Created by Administrator on 2016/5/25.
@@ -103,10 +115,52 @@ public class Util {
         return true;
     }
 
-    public static void printByteArray(String pre_text, byte[] in)
+    public static String convertToBase64String(File file)
     {
-        System.out.println(pre_text + new String(in));
+        try {
+            FileInputStream inputFile = new FileInputStream(file);
+            byte[] buffer = new byte[(int) file.length()];
+            inputFile.read(buffer);
+            inputFile.close();
+            return Base64.encodeToString(buffer, Base64.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
+
+    public static byte[] convertFileToByte(File file)
+    {
+        byte[] result = null;
+
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            result = convertBitmapToByte(bitmap);
+
+//            System.out.println(new String(result));
+//            FileInputStream fis = new FileInputStream(file);
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            byte[] b = new byte[1024];
+//            int n;
+//            while ((n = fis.read(b)) != -1) {
+//                bos.write(b, 0, n);
+//            }
+//            fis.close();
+//            bos.close();
+//            result = bos.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static byte[] convertBitmapToByte(Bitmap bitmap)
+    {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
 }
 

@@ -21,6 +21,7 @@
         android:layout_margin="5dp"
         android:layout_toLeftOf="@id/chat_avatar"
         android:background="@color/color_cccccc"
+        android:maxWidth="220dp"
         android:padding="5dp"
         android:text="@string/message"/>
 
@@ -38,9 +39,9 @@
         android:id="@+id/chat_resendImageView"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@mipmap/retry"
         android:layout_alignTop="@id/chatText_textView"
         android:layout_margin="5dp"
         android:layout_toLeftOf="@id/chatText_textView"
+        android:src="@mipmap/retry"
         android:visibility="gone"/>
 </RelativeLayout>

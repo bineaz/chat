@@ -45,6 +45,7 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     private long   receiver_id;  //接受者id
     private int    content_type; //内容类型
     private String content;  //内容
+    private String path;
     private int visible = 1;
     private String timestamp;
 
@@ -103,21 +104,22 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     }
 
 
-    public ChatMessage(long id, long sender_id, long receiver_id, int content_type, String content, int status)
+    public ChatMessage(long id, long sender_id, long receiver_id, int content_type, String content, String file_name, int status)
     {
         this.id = id;
         this.sender_id = sender_id;
         this.receiver_id = receiver_id;
         this.content_type = content_type;
         this.content = content;
+        this.path = file_name;
         this.status = status;
         timestamp = TimeUtil.getCurrentTimeString();
     }
 
 
-    @Generated(hash = 921400593)
+    @Generated(hash = 1407238152)
     public ChatMessage(long id, long chat_id, long sender_id, long receiver_id, int content_type, String content,
-                       int visible, String timestamp, int status)
+                       String path, int visible, String timestamp, int status)
     {
         this.id = id;
         this.chat_id = chat_id;
@@ -125,11 +127,11 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         this.receiver_id = receiver_id;
         this.content_type = content_type;
         this.content = content;
+        this.path = path;
         this.visible = visible;
         this.timestamp = timestamp;
         this.status = status;
     }
-
 
     @Generated(hash = 2271208)
     public ChatMessage()
@@ -261,12 +263,15 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     {
         return "ChatMessage{" +
                 "id=" + id +
+                ", chat_id=" + chat_id +
                 ", sender_id=" + sender_id +
                 ", receiver_id=" + receiver_id +
                 ", content_type=" + content_type +
                 ", content='" + content + '\'' +
+                ", path='" + path + '\'' +
                 ", visible=" + visible +
                 ", timestamp='" + timestamp + '\'' +
+                ", status=" + status +
                 '}';
     }
 
@@ -280,5 +285,15 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     public void setChat_id(long chat_id)
     {
         this.chat_id = chat_id;
+    }
+
+    public String getPath()
+    {
+        return this.path;
+    }
+
+    public void setPath(String path)
+    {
+        this.path = path;
     }
 }

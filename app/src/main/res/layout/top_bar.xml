@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionBarHeight"
+        android:background="@color/db32323d">
+
+        <ImageButton
+            android:id="@+id/topBar_backImageView"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_back"/>
+
+        <TextView
+            android:id="@+id/topBar_titleTextView"
+            style="@style/textMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/topBar_backImageView"
+            android:text="back"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
+</RelativeLayout>

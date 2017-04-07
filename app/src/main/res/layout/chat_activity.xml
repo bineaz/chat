@@ -1,55 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/chatActivity_MainFrameLayout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
 
-    <com.by.communication.widgit.layout.MyLinearLayout
-        android:id="@+id/chatActivity_linearLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/chat_recyclerView"
+        <include layout="@layout/top_bar"/>
+
+        <com.by.communication.widgit.layout.MyLinearLayout
+            android:id="@+id/chatActivity_linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        </android.support.v7.widget.RecyclerView>
-    </com.by.communication.widgit.layout.MyLinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/chat_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+        </com.by.communication.widgit.layout.MyLinearLayout>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-
-        <View
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/list_divider_height"
-            android:background="@color/color_cccccc"/>
+            android:layout_height="50dp"
+            android:layout_gravity="bottom">
 
-        <EditText
-            android:id="@+id/chatActivity_editText"
-            style="@style/editText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="50dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="12dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/list_divider_height"
+                android:background="@color/color_cccccc"/>
 
-        <com.by.communication.widgit.textView.DrawableTextView
-            android:id="@+id/chatActivity_sendTextView"
-            style="@style/textSmall"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:text="@string/send"
-            android:textColor="@color/white"
-            app:dt_solidColor="@color/colorAccentLight"
-            app:dt_touchSolidColor="@color/colorAccent"/>
+            <EditText
+                android:id="@+id/chatActivity_editText"
+                style="@style/editText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="100dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"/>
+
+            <ImageView
+                android:id="@+id/chatActivity_funcImageView"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="50dp"
+                android:padding="5dp"
+                android:src="@mipmap/icon_add_normal"/>
+
+            <com.by.communication.widgit.textView.DrawableTextView
+                android:id="@+id/chatActivity_sendTextView"
+                style="@style/textSmall"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:text="@string/send"
+                android:textColor="@color/white"
+                app:dt_solidColor="@color/colorAccentLight"
+                app:dt_touchSolidColor="@color/colorAccent"/>
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
 
-</LinearLayout>
+
+</FrameLayout>

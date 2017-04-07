@@ -30,4 +30,10 @@
     <string name="chat">聊天</string>
     <string name="friend">好友</string>
     <string name="send">发送</string>
+    <string name="all_image">全部图片</string>
+    <string name="piece">张</string>
+    <string name="take_picture">拍照</string>
+    <string name="all_picture">全部图片</string>
+    <string name="complete">完成</string>
+    <string name="select_picture">选择图片</string>
 </resources>

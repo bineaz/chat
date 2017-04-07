@@ -16,4 +16,5 @@
     <color name="list_divider_color">#F0F0F0</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="db32323d">#32323D</color>
+    <color name="black">#000000</color>
 </resources>

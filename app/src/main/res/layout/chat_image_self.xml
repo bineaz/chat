@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/chat_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:src="@mipmap/icon"/>
+
+    <ImageView
+        android:id="@+id/chat_imageView"
+        style="@style/textSmall"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:layout_alignTop="@id/chat_avatar"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@id/chat_avatar"
+        android:src="@mipmap/default_img"/>
+
+    <ProgressBar
+        android:id="@+id/chat_progressBar"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@id/chat_imageView"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@id/chat_imageView"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/chat_resendImageView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@id/chat_imageView"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@id/chat_imageView"
+        android:src="@mipmap/retry"
+        android:visibility="gone"/>
+</RelativeLayout>

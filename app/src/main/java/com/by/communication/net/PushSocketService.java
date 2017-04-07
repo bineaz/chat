@@ -136,7 +136,7 @@ public class PushSocketService extends Service {
             registerSocketToken();
         }
 
-        //过滤ping
+        //过滤心跳 (ping)
         else if (!message.endsWith("g")) {
             try {
                 Gson gson = new Gson();

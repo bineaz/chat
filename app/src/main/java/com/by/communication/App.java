@@ -67,6 +67,9 @@ public class App extends MultiDexApplication {
 
     public User getUser()
     {
+        if (user == null)
+            return new User();
+
         return user;
     }
 

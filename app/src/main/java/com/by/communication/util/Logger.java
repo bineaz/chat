@@ -3,6 +3,7 @@ package com.by.communication.util;
 import android.util.Log;
 
 import com.by.communication.entity.ChatMessage;
+import com.by.communication.fragment.image.ImageItem;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,8 @@ import java.util.ArrayList;
  */
 
 public class Logger {
-    private static boolean debug = true;
+    private static final String  DEFAULT_TAG = "DEFAULT";
+    private static       boolean debug       = true;
 
     public static void e(String TAG, String message)
     {
@@ -26,5 +28,18 @@ public class Logger {
         for (int i = 0; i < arrayList.size(); i++) {
             Log.e(TAG, arrayList.get(i).toString());
         }
+    }
+
+    public static void d(String TAG, String message)
+    {
+        if (debug) {
+            Log.d(TAG, message);
+
+        }
+    }
+
+    public static void e(Object o)
+    {
+        Logger.e(DEFAULT_TAG, o.toString());
     }
 }

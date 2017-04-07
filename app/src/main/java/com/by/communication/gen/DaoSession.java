@@ -8,10 +8,12 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.by.communication.entity.ChatFile;
 import com.by.communication.entity.ChatMessage;
 import com.by.communication.entity.Friend;
 import com.by.communication.entity.User;
 
+import com.by.communication.gen.ChatFileDao;
 import com.by.communication.gen.ChatMessageDao;
 import com.by.communication.gen.FriendDao;
 import com.by.communication.gen.UserDao;
@@ -25,10 +27,12 @@ import com.by.communication.gen.UserDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig chatFileDaoConfig;
     private final DaoConfig chatMessageDaoConfig;
     private final DaoConfig friendDaoConfig;
     private final DaoConfig userDaoConfig;
 
+    private final ChatFileDao chatFileDao;
     private final ChatMessageDao chatMessageDao;
     private final FriendDao friendDao;
     private final UserDao userDao;
@@ -36,6 +40,9 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
+
+        chatFileDaoConfig = daoConfigMap.get(ChatFileDao.class).clone();
+        chatFileDaoConfig.initIdentityScope(type);
 
         chatMessageDaoConfig = daoConfigMap.get(ChatMessageDao.class).clone();
         chatMessageDaoConfig.initIdentityScope(type);
@@ -46,19 +53,26 @@ public class DaoSession extends AbstractDaoSession {
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
 
+        chatFileDao = new ChatFileDao(chatFileDaoConfig, this);
         chatMessageDao = new ChatMessageDao(chatMessageDaoConfig, this);
         friendDao = new FriendDao(friendDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
 
+        registerDao(ChatFile.class, chatFileDao);
         registerDao(ChatMessage.class, chatMessageDao);
         registerDao(Friend.class, friendDao);
         registerDao(User.class, userDao);
     }
     
     public void clear() {
+        chatFileDaoConfig.clearIdentityScope();
         chatMessageDaoConfig.clearIdentityScope();
         friendDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
+    }
+
+    public ChatFileDao getChatFileDao() {
+        return chatFileDao;
     }
 
     public ChatMessageDao getChatMessageDao() {
