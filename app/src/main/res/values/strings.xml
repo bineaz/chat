@@ -36,4 +36,6 @@
     <string name="all_picture">全部图片</string>
     <string name="complete">完成</string>
     <string name="select_picture">选择图片</string>
+    <string name="logout">注销</string>
+    <string name="not_supported">不支持</string>
 </resources>

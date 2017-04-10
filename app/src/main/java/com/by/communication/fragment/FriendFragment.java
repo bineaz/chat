@@ -18,10 +18,12 @@ import com.by.communication.gen.UserDao;
 import com.by.communication.re.UserService;
 import com.by.communication.util.ImageUtil;
 import com.by.communication.util.RetrofitUtil;
+import com.by.communication.util.Usp;
 import com.by.communication.widgit.listView.InsetListView;
 import com.by.communication.widgit.listView.adapter.ListHolder;
 import com.by.communication.widgit.listView.adapter.SingleListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -79,7 +81,7 @@ public class FriendFragment extends BaseFragment {
 
             RetrofitUtil.getInstance()
                     .service(UserService.class)
-                    .getFriend(1)
+                    .getFriend(Usp.getInstance().getUserId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<Response<List<Friend>>>() {
@@ -98,18 +100,23 @@ public class FriendFragment extends BaseFragment {
                         @Override
                         public void onNext(Response<List<Friend>> response)
                         {
-                            System.out.println(response.toString());
-
                             if (response.getCode() == response.CODE_SUCCESS) {
+                                ArrayList<User> arrayList = new ArrayList<User>();
+
                                 List<Friend> friendList = response.getData();
-                                userArrayList.clear();
                                 for (int i = 0; i < friendList.size(); i++) {
-                                    userArrayList.add(friendList.get(i).convertToUser());
+                                    arrayList.add(friendList.get(i).convertToUser());
                                 }
 
-                                userDao.insertOrReplaceInTx(userArrayList);
+                                userDao.insertOrReplaceInTx(arrayList);
                                 FriendDao friendDao = App.getInstance().getDaoSession().getFriendDao();
                                 friendDao.insertOrReplaceInTx(friendList);
+
+                                for (int i = 0; i < arrayList.size(); i++) {
+                                    if (!userArrayList.contains(arrayList.get(i))) {
+                                        userArrayList.add(arrayList.get(i));
+                                    }
+                                }
 
                                 adapter.notifyDataSetChanged();
                             }
@@ -118,46 +125,6 @@ public class FriendFragment extends BaseFragment {
                         }
                     });
 
-//            UserService userService = retrofit.create(UserService.class);
-//
-//            Observable<Response<List<Friend>>> observable = userService.getFriend(1);
-//            observable.subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Subscriber<Response<List<Friend>>>() {
-//                        @Override
-//                        public void onCompleted()
-//                        {
-////                        Logger.e("", "complete");
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e)
-//                        {
-//                            e.printStackTrace();
-//                        }
-//
-//                        @Override
-//                        public void onNext(Response<List<Friend>> response)
-//                        {
-//                            System.out.println(response.toString());
-//
-//                            if (response.getCode() == response.CODE_SUCCESS) {
-//                                List<Friend> friendList = response.getData();
-//                                userArrayList.clear();
-//                                for (int i = 0; i < friendList.size(); i++) {
-//                                    userArrayList.add(friendList.get(i).convertToUser());
-//                                }
-//
-//                                userDao.insertOrReplaceInTx(userArrayList);
-//                                FriendDao friendDao = App.getInstance().getDaoSession().getFriendDao();
-//                                friendDao.insertOrReplaceInTx(friendList);
-//
-//                                adapter.notifyDataSetChanged();
-//                            }
-//
-//
-//                        }
-//                    });
         }
 
     }

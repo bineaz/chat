@@ -122,9 +122,10 @@ public class LoginActivity extends BaseActivity {
                     public void onNext(Response<User> response)
                     {
                         System.out.println(response.toString());
-
                         if (response.getCode() == response.CODE_SUCCESS) {
                             UserDao userDao = App.getInstance().getDaoSession().getUserDao();
+                            userDao.deleteAll();
+
                             userDao.insertOrReplace(response.getData());
 
                             Usp.getInstance().login(response.getData());

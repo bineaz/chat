@@ -62,7 +62,7 @@
                     android:inputType="textVisiblePassword"
                     android:maxLength="11"
                     android:singleLine="true"
-                    android:text=""
+                    android:text="15757126393"
                     android:textColor="@color/color_999999"
                     android:textColorHint="@color/color_999999"
                     android:textSize="14dp"/>
@@ -104,7 +104,7 @@
                     android:inputType="textPassword"
                     android:maxLength="30"
                     android:singleLine="true"
-                    android:text=""
+                    android:text="123"
                     android:textColor="@color/color_999999"
                     android:textColorHint="@color/color_999999"
                     android:textSize="14dp"/>

@@ -27,7 +27,7 @@ public abstract class OkHttpRequestBuilder<T extends OkHttpRequestBuilder> {
     {
         this.url = ConstantUtil.BASE_URL + url;
 
-        Logger.e("url", this.url);
+//        Logger.e("url", this.url);
 
         return (T) this;
     }

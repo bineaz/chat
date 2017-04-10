@@ -17,11 +17,13 @@ import com.by.communication.entity.Response;
 import com.by.communication.fragment.ChatRecordFragment;
 import com.by.communication.fragment.EmptyFragment;
 import com.by.communication.fragment.FriendFragment;
+import com.by.communication.fragment.LogoutFragment;
 import com.by.communication.gen.ChatMessageDao;
 import com.by.communication.net.PushSocketService;
 import com.by.communication.net.okhttp.HttpUtil;
 import com.by.communication.net.okhttp.callback.StringCallback;
 import com.by.communication.re.ChatService;
+import com.by.communication.re.SubscriberAdapter;
 import com.by.communication.util.ConstantUtil;
 import com.by.communication.util.RetrofitUtil;
 import com.by.communication.util.Util;
@@ -51,40 +53,11 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         startService(new Intent(this, PushSocketService.class));
 
-//        HttpUtil.get().url("http://www.hao123.com").build().execute(new StringCallback() {
-//            @Override
-//            public void onError(Call call, Exception e, int id)
-//            {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(String response, int id)
-//            {
-//                System.out.println(response);
-//            }
-//        });
-
-//        HttpUtil.get().url("getChatHistory/1").build().execute(new StringCallback() {
-//            @Override
-//            public void onError(Call call, Exception e, int id)
-//            {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(String response, int id)
-//            {
-//                System.out.println(response);
-//            }
-//        });
-
-
         fragmentArrayList = new ArrayList<>();
         fragmentArrayList.add(new FriendFragment());
         fragmentArrayList.add(new ChatRecordFragment());
         fragmentArrayList.add(new EmptyFragment());
-        fragmentArrayList.add(new EmptyFragment());
+        fragmentArrayList.add(new LogoutFragment());
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
 
         viewPager.setOffscreenPageLimit(3);
@@ -112,19 +85,7 @@ public class MainActivity extends BaseActivity {
                 .getChatMessageHistory(getUser_id(), max_message_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Response<List<ChatMessage>>>() {
-                    @Override
-                    public void onCompleted()
-                    {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        e.printStackTrace();
-                    }
-
+                .subscribe(new SubscriberAdapter<Response<List<ChatMessage>>>() {
                     @Override
                     public void onNext(Response<List<ChatMessage>> response)
                     {
@@ -146,7 +107,7 @@ public class MainActivity extends BaseActivity {
 
     private class FragmentAdapter extends FragmentPagerAdapter {
 
-        int[] title = {R.string.chat, R.string.friend, R.string.chat, R.string.chat};
+        int[] title = {R.string.chat, R.string.friend, R.string.chat, R.string.logout};
 
         public FragmentAdapter(FragmentManager fm)
         {

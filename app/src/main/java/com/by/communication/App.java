@@ -23,7 +23,7 @@ public class App extends MultiDexApplication {
 
     private static App instance;
 
-    private User user = new User();
+    private User user;
 
     @Override
     public void onCreate()
@@ -67,14 +67,14 @@ public class App extends MultiDexApplication {
 
     public User getUser()
     {
-        if (user == null)
-            return new User();
-
         return user;
     }
 
     public long getUserId()
     {
+        if (user == null)
+            return 0;
+
         return user.getId();
     }
 

@@ -3,6 +3,7 @@ package com.by.communication.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.by.communication.util.FragmentUtil;
 import com.by.communication.util.ImageUtil;
 import com.by.communication.util.Logger;
 import com.by.communication.util.RetrofitUtil;
+import com.by.communication.util.TimeUtil;
 import com.by.communication.util.Util;
 import com.by.communication.util.an.compress.Luban;
 import com.by.communication.util.an.compress.OnCompressListener;
@@ -35,6 +37,8 @@ import com.by.communication.widgit.adapter.BaseViewHolder;
 import com.by.communication.widgit.layout.MyLinearLayout;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,7 +79,8 @@ public class ChatActivity extends IoActivity {
 
     private Handler handler = new Handler();
 
-    private ChatMessageDao chatMessageDao;
+    private ChatMessageDao      chatMessageDao;
+    private LinearLayoutManager manager;
 
     @Override
     public int getLayoutResId()
@@ -91,14 +96,21 @@ public class ChatActivity extends IoActivity {
             ChatMessage chatMessage = bundle.getParcelable("chatMessage");
             chatMessageArrayList.add(chatMessage);
 
-            System.out.println(chatMessage.toString());
-
             handler.post(new Runnable() {
                 @Override
                 public void run()
                 {
-                    System.out.println("asdasdsadsadsa");
+                    boolean scroll = false;
+                    System.out.println(manager.findLastCompletelyVisibleItemPosition() + " " + chatMessageArrayList.size());
+                    if (manager.findLastCompletelyVisibleItemPosition() == chatMessageArrayList.size() - 2) {
+                        scroll = true;
+                    }
                     chatAdapter.notifyDataSetChanged();
+                    if (scroll) {
+                        recyclerView.scrollToPosition(chatMessageArrayList.size() - 1);
+                    } else {
+                        Util.toast(getApplicationContext(), "new message");
+                    }
                 }
             });
         }
@@ -113,12 +125,22 @@ public class ChatActivity extends IoActivity {
         chatMessageDao = App.getInstance().getDaoSession().getChatMessageDao();
 
         chatMessageArrayList = new ArrayList<>();
-        chatMessageArrayList.addAll(chatMessageDao.loadAll());
+        QueryBuilder<ChatMessage> qb = chatMessageDao.queryBuilder();
+
+        QueryBuilder.LOG_SQL = true;
+
+        qb.where(new WhereCondition.StringCondition(
+                "T.'SENDER_ID' ='" + friend.getId() + "' AND T.'RECEIVER_ID' = '" + user.getId() + "'" +
+                        " OR T.'SENDER_ID' ='" + user.getId() + "' AND T.'RECEIVER_ID' = '" + friend.getId() + "'"
+        ));
+
+        chatMessageArrayList.addAll(qb.orderAsc(ChatMessageDao.Properties.Timestamp).build().list());
 
         Logger.list("chatMessage", chatMessageArrayList);
 
         chatAdapter = new ChatAdapter(chatMessageArrayList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(chatAdapter);
 
         recyclerView.scrollToPosition(chatMessageArrayList.size() - 1);
@@ -171,7 +193,7 @@ public class ChatActivity extends IoActivity {
                                     @Override
                                     public void onSuccess(File file)
                                     {
-                                        Logger.e("???", file.length() + " " + file.getName());
+                                        Logger.e("image", file.length() + " " + file.getName());
                                         sendMessage(ChatMessage.IMAGE, file);
 
                                     }
@@ -183,27 +205,6 @@ public class ChatActivity extends IoActivity {
                                     }
                                 }).launch();
 
-//                        Luban.compress(getApplicationContext(), file)
-//                                .putGear(Luban.CUSTOM_GEAR)
-//                                .launch(new OnCompressListener() {
-//                                    @Override
-//                                    public void onStart()
-//                                    {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onSuccess(File file)
-//                                    {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(Throwable e)
-//                                    {
-//
-//                                    }
-//                                });
                     }
                 });
                 FragmentUtil.addFragment(getSupportFragmentManager(), R.id.chatActivity_MainFrameLayout, pickImageFragment, true);
@@ -213,7 +214,7 @@ public class ChatActivity extends IoActivity {
 
     private void sendMessage(final int type, final File file)
     {
-        Logger.e("why", "whywhywhy");
+        Logger.d("why", "whywhywhy");
         String text = "";
         String file_name = null;
 
@@ -274,41 +275,6 @@ public class ChatActivity extends IoActivity {
 
         chatAdapter.notifyDataSetChanged();
 
-
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .client(HttpUtil.getInstance().getOkHttpClient())
-//                .baseUrl(ConstantUtil.BASE_URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//                .build();
-//
-//
-//        retrofit.create(ChatService.class)
-//                .sendMessage(user.getId(), friend.getId(), type,
-//                        type == ChatMessage.TEXT ? RequestBody.create(null, text) : null,
-//                        type == ChatMessage.TEXT ? null : part)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<String>() {
-//                    @Override
-//                    public void onCompleted()
-//                    {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//
-//                    @Override
-//                    public void onNext(String s)
-//                    {
-//                        System.out.println(s);
-//                    }
-//                });
-
         RetrofitUtil.getInstance().service(ChatService.class)
                 .sendMessage(user.getId(), friend.getId(), type,
                         type == ChatMessage.TEXT ? RequestBody.create(null, text) : null,
@@ -333,9 +299,9 @@ public class ChatActivity extends IoActivity {
                     @Override
                     public void onNext(Response<ChatMessage> chatMessageResponse)
                     {
-                        System.out.println(chatMessageResponse.toString());
-
                         ChatMessage chatMessage = chatMessageResponse.getData();
+
+                        chatMessage.setTimestamp(TimeUtil.covertToLocalTime(chatMessage.getTimestamp()));
 
                         chatMessageDao.deleteByKey(temp_id);
                         chatMessageDao.insertOrReplaceInTx(chatMessage);
@@ -370,7 +336,7 @@ public class ChatActivity extends IoActivity {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, ChatMessage message)
+        protected void convert(BaseViewHolder holder, final ChatMessage message)
         {
             switch (holder.getItemViewType()) {
 
@@ -410,6 +376,59 @@ public class ChatActivity extends IoActivity {
                     break;
             }
 
+            retryImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    if (message.getContent_type() == ChatMessage.TEXT) {
+
+                    } else {
+                        Util.toast(getApplicationContext(), getString(R.string.not_supported));
+                    }
+                }
+            });
+
+        }
+
+        public void resend(final ChatMessage chatMessage)
+        {
+
+            int type = chatMessage.getContent_type();
+
+            RetrofitUtil.getInstance().service(ChatService.class)
+                    .sendMessage(user.getId(), friend.getId(), type,
+                            RequestBody.create(null, chatMessage.getContent()), null)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<Response<ChatMessage>>() {
+                        @Override
+                        public void onCompleted()
+                        {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e)
+                        {
+                            e.printStackTrace();
+                            chatMessage.setStatus(ChatMessage.SEND_FAILED);
+                            chatAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onNext(Response<ChatMessage> chatMessageResponse)
+                        {
+                            ChatMessage chatMessage = chatMessageResponse.getData();
+
+                            chatMessage.setTimestamp(TimeUtil.covertToLocalTime(chatMessage.getTimestamp()));
+
+                            chatMessageDao.deleteByKey(chatMessage.getId());
+                            chatMessageDao.insertOrReplaceInTx(chatMessage);
+
+                            chatMessage.setStatus(ChatMessage.SEND_SUCCESS);
+                            chatAdapter.notifyDataSetChanged();
+                        }
+                    });
         }
     }
 }

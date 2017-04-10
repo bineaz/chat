@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Friend {
     @Id
-    private long id;
+    private Long id;
 
     private long   owner_id;
     private long   friend_id;
@@ -29,9 +29,8 @@ public class Friend {
     @Transient
     private int    gender;
 
-    @Generated(hash = 2078754734)
-    public Friend(long id, long owner_id, long friend_id, String timestamp)
-    {
+    @Generated(hash = 1395781690)
+    public Friend(Long id, long owner_id, long friend_id, String timestamp) {
         this.id = id;
         this.owner_id = owner_id;
         this.friend_id = friend_id;
@@ -59,7 +58,7 @@ public class Friend {
                 '}';
     }
 
-    public long getId()
+    public Long getId()
     {
         return this.id;
     }
@@ -110,5 +109,9 @@ public class Friend {
                 phone,
                 gender
         );
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

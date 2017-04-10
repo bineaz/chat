@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.by.communication.App;
 import com.by.communication.R;
+import com.by.communication.entity.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +35,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     {
 
         app = App.getInstance();
-        user_id = app.getUser().getId();
+        User user = app.getUser();
+
+        if (user != null)
+            user_id = user.getId();
 
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);

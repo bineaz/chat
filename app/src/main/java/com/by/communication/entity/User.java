@@ -15,7 +15,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class User implements Parcelable {
     @Id
-    private long   id;
+    private Long   id;
     private String username;
     private String password;
     private String nickname;
@@ -23,9 +23,10 @@ public class User implements Parcelable {
     private String phone;
     private int    gender;
 
-    @Generated(hash = 1225870772)
-    public User(long id, String username, String password, String nickname, String avatar, String phone,
-            int gender) {
+    @Generated(hash = 610116547)
+    public User(Long id, String username, String password, String nickname, String avatar, String phone,
+                int gender)
+    {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -65,7 +66,7 @@ public class User implements Parcelable {
         }
     };
 
-    public long getId()
+    public Long getId()
     {
         return this.id;
     }
@@ -125,11 +126,13 @@ public class User implements Parcelable {
         this.phone = phone;
     }
 
-    public int getGender() {
+    public int getGender()
+    {
         return this.gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(int gender)
+    {
         this.gender = gender;
     }
 
@@ -163,5 +166,27 @@ public class User implements Parcelable {
         parcel.writeString(avatar);
         parcel.writeString(phone);
         parcel.writeInt(gender);
+    }
+
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof User) {
+            User u = (User) obj;
+            return u.getId() == id;
+        }
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        String s = id + username;
+        return s.hashCode();
     }
 }

@@ -38,7 +38,7 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
 
     @Id
     @SerializedName("message_id")
-    private long id;
+    private Long id;
 
     private long   chat_id;   //聊天组用到
     private long   sender_id;   //发送者id
@@ -117,10 +117,9 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     }
 
 
-    @Generated(hash = 1407238152)
-    public ChatMessage(long id, long chat_id, long sender_id, long receiver_id, int content_type, String content,
-                       String path, int visible, String timestamp, int status)
-    {
+    @Generated(hash = 96499247)
+    public ChatMessage(Long id, long chat_id, long sender_id, long receiver_id, int content_type, String content, String path,
+            int visible, String timestamp, int status) {
         this.id = id;
         this.chat_id = chat_id;
         this.sender_id = sender_id;
@@ -175,7 +174,7 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         this.status = status;
     }
 
-    public long getId()
+    public Long getId()
     {
         return this.id;
     }
@@ -295,5 +294,9 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     public void setPath(String path)
     {
         this.path = path;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

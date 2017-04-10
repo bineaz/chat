@@ -27,20 +27,14 @@ public interface ChatService {
     @GET("getChatHistory/{user_id}/{last_message_id}")
     Observable<Response<List<ChatMessage>>> getChatMessageHistory(@Path("user_id") long user_id, @Path("last_message_id") long last_message_id);
 
-//    @POST("sendMessage")
-//    @FormUrlEncoded
-//    Observable<Response<ChatMessage>> sendMessage(
-//            @Field("sender_id") long sender_id, @Field("chat_id") long chat_id,
-//            @Field("content_type") int content_type, @Field("content") String content,
-//            @Field("users") String users);
-
-//    @POST("sendMessage")
-//    @Multipart
-//    Observable<Response<ChatMessage>> sendMessage(
-//            @Part("sender_id") long sender_id, @Part("receiver_id") long receiver_id,
-//            @Part("content_type") int content_type, @Part("content") RequestBody content,
-//            @Part MultipartBody.Part file);
-
+    /**
+     * @param sender_id      发送者id
+     * @param receiver_id    接收者id
+     * @param content_type   消息类型
+     * @param content        文字消息
+     * @param file           文件消息  图片 语音 文档
+     * @return
+     */
     @POST("sendMessage")
     @Multipart
     Observable<Response<ChatMessage>> sendMessage(

@@ -17,6 +17,7 @@ import com.by.communication.net.okhttp.HttpUtil;
 import com.by.communication.net.okhttp.callback.StringCallback;
 import com.by.communication.util.ConstantUtil;
 import com.by.communication.util.Logger;
+import com.by.communication.util.TimeUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.neovisionaries.ws.client.WebSocket;
@@ -115,6 +116,15 @@ public class PushSocketService extends Service {
             public void onError(WebSocket WebSocket, WebSocketException cause)
             {
                 cause.printStackTrace();
+                Observable.timer(2, TimeUnit.SECONDS)
+                        .subscribe(new Action1<Long>() {
+                            @Override
+                            public void call(Long aLong)
+                            {
+                                ns_connect();
+                            }
+                        });
+
             }
 
             @Override
@@ -141,6 +151,9 @@ public class PushSocketService extends Service {
             try {
                 Gson gson = new Gson();
                 ChatMessage chatMessage = gson.fromJson(message, ChatMessage.class);
+
+                Logger.e("pushed message:" + chatMessage.toString());
+                chatMessage.setTimestamp(TimeUtil.covertToLocalTime(chatMessage.getTimestamp()));
 
                 chatMessageDao.insertOrReplace(chatMessage);
                 postMessage(chatMessage);
@@ -172,13 +185,12 @@ public class PushSocketService extends Service {
                     public void onError(Call call, Exception e, int id)
                     {
                         e.printStackTrace();
-//                        registerSocketToken();
                     }
 
                     @Override
                     public void onResponse(String response, int id)
                     {
-                        Logger.e("socket", response.toString());
+                        Logger.d("socket", response.toString());
                         loadHistory();
                     }
                 });

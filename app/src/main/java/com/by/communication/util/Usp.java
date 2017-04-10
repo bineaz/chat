@@ -51,4 +51,10 @@ public class Usp {
         editor.putLong("user_id", user.getId());
         editor.commit();
     }
+
+    public void logout()
+    {
+        editor.clear();
+        editor.commit();
+    }
 }

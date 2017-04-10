@@ -24,7 +24,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Chat_id = new Property(1, long.class, "chat_id", false, "CHAT_ID");
         public final static Property Sender_id = new Property(2, long.class, "sender_id", false, "SENDER_ID");
         public final static Property Receiver_id = new Property(3, long.class, "receiver_id", false, "RECEIVER_ID");
@@ -49,7 +49,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CHAT_MESSAGE\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"CHAT_ID\" INTEGER NOT NULL ," + // 1: chat_id
                 "\"SENDER_ID\" INTEGER NOT NULL ," + // 2: sender_id
                 "\"RECEIVER_ID\" INTEGER NOT NULL ," + // 3: receiver_id
@@ -70,7 +70,11 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, ChatMessage entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindLong(2, entity.getChat_id());
         stmt.bindLong(3, entity.getSender_id());
         stmt.bindLong(4, entity.getReceiver_id());
@@ -97,7 +101,11 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, ChatMessage entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindLong(2, entity.getChat_id());
         stmt.bindLong(3, entity.getSender_id());
         stmt.bindLong(4, entity.getReceiver_id());
@@ -123,13 +131,13 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
 
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public ChatMessage readEntity(Cursor cursor, int offset) {
         ChatMessage entity = new ChatMessage( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getLong(offset + 1), // chat_id
             cursor.getLong(offset + 2), // sender_id
             cursor.getLong(offset + 3), // receiver_id
@@ -145,7 +153,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
      
     @Override
     public void readEntity(Cursor cursor, ChatMessage entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setChat_id(cursor.getLong(offset + 1));
         entity.setSender_id(cursor.getLong(offset + 2));
         entity.setReceiver_id(cursor.getLong(offset + 3));
@@ -174,7 +182,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
 
     @Override
     public boolean hasKey(ChatMessage entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        return entity.getId() != null;
     }
 
     @Override

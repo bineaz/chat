@@ -1,10 +1,10 @@
 package com.by.communication.util;
 
 import com.by.communication.net.okhttp.HttpUtil;
+import com.by.communication.re.GsonConverterFactory;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Produced a lot of bug on 2017/4/5.

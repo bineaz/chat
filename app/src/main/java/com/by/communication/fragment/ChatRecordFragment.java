@@ -16,6 +16,8 @@ import com.by.communication.gen.ChatMessageDao;
 import com.by.communication.net.okhttp.HttpUtil;
 import com.by.communication.re.ChatService;
 import com.by.communication.util.ImageUtil;
+import com.by.communication.util.RetrofitUtil;
+import com.by.communication.util.Usp;
 import com.by.communication.widgit.listView.InsetListView;
 import com.by.communication.widgit.listView.adapter.ListHolder;
 import com.by.communication.widgit.listView.adapter.SingleListAdapter;
@@ -55,24 +57,16 @@ public class ChatRecordFragment extends BaseFragment {
         adapter = new ChatAdapter(chatRecordArrayList);
         listView.setAdapter(adapter);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://chat.tangcheng.me/index.php/Chat/")
-//                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(HttpUtil.getInstance().getOkHttpClient())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-
-        ChatService chatService = retrofit.create(ChatService.class);
-
-        Observable<Response<List<ChatMessage>>> observable = chatService.getChatMessageHistory(1, 1);
-        observable.subscribeOn(Schedulers.io())
+        RetrofitUtil.getInstance()
+                .service(ChatService.class)
+                .getChatMessageHistory(Usp.getInstance().getUserId(), 0)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Response<List<ChatMessage>>>() {
                     @Override
                     public void onCompleted()
                     {
-//                        Logger.e("", "complete");
+
                     }
 
                     @Override
@@ -84,8 +78,6 @@ public class ChatRecordFragment extends BaseFragment {
                     @Override
                     public void onNext(Response<List<ChatMessage>> response)
                     {
-                        System.out.println(response.toString());
-
                         if (response.getCode() == response.CODE_SUCCESS) {
                             ChatMessageDao chatMessageDao = App.getInstance().getDaoSession().getChatMessageDao();
 
@@ -93,10 +85,51 @@ public class ChatRecordFragment extends BaseFragment {
 
 
                         }
-
-
                     }
                 });
+
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("http://chat.tangcheng.me/index.php/Chat/")
+////                .addConverterFactory(ScalarsConverterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .client(HttpUtil.getInstance().getOkHttpClient())
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                .build();
+//
+//        ChatService chatService = retrofit.create(ChatService.class);
+//
+//        Observable<Response<List<ChatMessage>>> observable = chatService.getChatMessageHistory(1, 1);
+//        observable.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<Response<List<ChatMessage>>>() {
+//                    @Override
+//                    public void onCompleted()
+//                    {
+////                        Logger.e("", "complete");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//
+//                    @Override
+//                    public void onNext(Response<List<ChatMessage>> response)
+//                    {
+//                        System.out.println(response.toString());
+//
+//                        if (response.getCode() == response.CODE_SUCCESS) {
+//                            ChatMessageDao chatMessageDao = App.getInstance().getDaoSession().getChatMessageDao();
+//
+//                            chatMessageDao.insertOrReplaceInTx(response.getData());
+//
+//
+//                        }
+//
+//
+//                    }
+//                });
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
