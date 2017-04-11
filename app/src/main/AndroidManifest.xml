@@ -18,6 +18,13 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
 
+    //存储
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    //media
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"

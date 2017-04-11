@@ -238,9 +238,9 @@ public class FragmentUtil {
 //                ft.setCustomAnimations(R.animator.boost, R.animator.scale, R.animator.boost, R.animator.scale);
 //                break;
 //
-//            case SPREAD:
-//                ft.setCustomAnimations(R.animator.open, R.animator.fate, R.animator.open, R.animator.fate);
-//                break;
+            case SPREAD:
+                ft.setCustomAnimations(R.anim.open, R.anim.fate, R.anim.open, R.anim.fate);
+                break;
 //            case BOOST_2_AND_SHOW:
 //                ft.setCustomAnimations(R.animator.scale_2_and_show, R.animator.boost_2_and_fade, R.animator.scale_2_and_show, R.animator.boost_2_and_fade);
 //                break;

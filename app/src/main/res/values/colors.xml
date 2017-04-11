@@ -17,4 +17,6 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="db32323d">#32323D</color>
     <color name="black">#000000</color>
+    <color name="green_A3DEA3">#A3DEA3</color>
+    <color name="red">#f74343</color>
 </resources>

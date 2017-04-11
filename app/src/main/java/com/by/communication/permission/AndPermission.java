@@ -44,7 +44,7 @@ public class AndPermission {
      */
     public static boolean hasAlwaysDeniedPermission(@NonNull Activity activity, @NonNull String... deniedPermissions) {
         for (String deniedPermission : deniedPermissions) {
-            if (!PermissionUtils.shouldShowRationalePermissions(activity, deniedPermission)) {
+            if (PermissionUtils.shouldShowRationalePermissions(activity, deniedPermission)) {
                 return true;
             }
         }

@@ -9,10 +9,11 @@
         android:layout_height="@dimen/actionBarHeight"
         android:background="@color/db32323d">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/topBar_backImageView"
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:padding="12dp"
             android:src="@mipmap/ic_back"/>
 
         <TextView
@@ -20,7 +21,7 @@
             style="@style/textMedium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="4dp"
             android:layout_toRightOf="@id/topBar_backImageView"
             android:text="back"
             android:textColor="@color/white"/>

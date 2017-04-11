@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created by Administrator on 2016/5/25.
@@ -137,18 +138,6 @@ public class Util {
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
             result = convertBitmapToByte(bitmap);
-
-//            System.out.println(new String(result));
-//            FileInputStream fis = new FileInputStream(file);
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            byte[] b = new byte[1024];
-//            int n;
-//            while ((n = fis.read(b)) != -1) {
-//                bos.write(b, 0, n);
-//            }
-//            fis.close();
-//            bos.close();
-//            result = bos.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -161,6 +150,18 @@ public class Util {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
+    }
+
+    public static String getRandomString(int length)
+    {
+        String base = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(base.length());
+            sb.append(base.charAt(number));
+        }
+        return sb.toString();
     }
 }
 

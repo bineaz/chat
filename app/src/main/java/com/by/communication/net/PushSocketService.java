@@ -14,6 +14,7 @@ import com.by.communication.App;
 import com.by.communication.entity.ChatMessage;
 import com.by.communication.gen.ChatMessageDao;
 import com.by.communication.net.okhttp.HttpUtil;
+import com.by.communication.net.okhttp.callback.FileCallBack;
 import com.by.communication.net.okhttp.callback.StringCallback;
 import com.by.communication.util.ConstantUtil;
 import com.by.communication.util.Logger;
@@ -28,6 +29,7 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,8 @@ import rx.Observable;
 import rx.functions.Action1;
 
 public class PushSocketService extends Service {
+    private final static String TAG = "PushSocketService";
+
     public static final String CHAT_MESSAGE = "chat_message";
     private WebSocketFactory ws_factory;
     private WebSocket        ws;
@@ -150,13 +154,32 @@ public class PushSocketService extends Service {
         else if (!message.endsWith("g")) {
             try {
                 Gson gson = new Gson();
-                ChatMessage chatMessage = gson.fromJson(message, ChatMessage.class);
+                final ChatMessage chatMessage = gson.fromJson(message, ChatMessage.class);
 
-                Logger.e("pushed message:" + chatMessage.toString());
+                Logger.e(TAG, chatMessage.toString());
                 chatMessage.setTimestamp(TimeUtil.covertToLocalTime(chatMessage.getTimestamp()));
 
                 chatMessageDao.insertOrReplace(chatMessage);
                 postMessage(chatMessage);
+
+                if (chatMessage.isAudio()) {
+                    HttpUtil.get()
+                            .rawUrl(ConstantUtil.AUDIO_BASE_URL + chatMessage.getPath())
+                            .build()
+                            .execute(new FileCallBack(ConstantUtil.AUDIO_BASE_PATH, chatMessage.getPath()) {
+                                @Override
+                                public void onError(Call call, Exception e, int id)
+                                {
+                                    Logger.d(TAG, e.getMessage());
+                                }
+
+                                @Override
+                                public void onResponse(File response, int id)
+                                {
+                                    Logger.d(TAG, chatMessage.getPath() + "downloaded");
+                                }
+                            });
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

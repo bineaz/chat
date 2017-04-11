@@ -12,6 +12,7 @@ import com.google.gson.annotations.SerializedName;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * Produced a lot of bug on 2017/3/31.
@@ -22,15 +23,18 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
 
     public static final int TEXT  = 11;
     public static final int IMAGE = 12;
-    public static final int VOICE = 13;
+    public static final int AUDIO = 13;
+    public static final int FILE  = 14;
 
     public static final int TEXT_SELF  = 101;
     public static final int IMAGE_SELF = 102;
-    public static final int VOICE_SELF = 103;
+    public static final int AUDIO_SELF = 103;
+    public static final int FILE_SELF  = 104;
 
     public static final int TEXT_OTHER  = 201;
     public static final int IMAGE_OTHER = 202;
-    public static final int VOICE_OTHER = 203;
+    public static final int AUDIO_OTHER = 203;
+    public static final int FILE_OTHER  = 204;
 
     public static final int SENDING      = 21;
     public static final int SEND_SUCCESS = 22;
@@ -46,8 +50,12 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     private int    content_type; //内容类型
     private String content;  //内容
     private String path;
+    private int    length;    //音频长度
     private int visible = 1;
     private String timestamp;
+
+    @Transient
+    private float progress;
 
     private int status = SEND_SUCCESS;  //发送状态
 
@@ -98,13 +106,40 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         parcel.writeInt(status);
     }
 
+    public boolean isAudio()
+    {
+        return content_type == AUDIO;
+    }
+
+    public boolean isSending()
+    {
+        return status == SENDING;
+    }
+
     @IntDef({SENDING, SEND_SUCCESS, SEND_FAILED})
     @interface SendStatus {
 
     }
 
+    @Override
+    public String toString()
+    {
+        return "ChatMessage{" +
+                "id=" + id +
+                ", chat_id=" + chat_id +
+                ", sender_id=" + sender_id +
+                ", receiver_id=" + receiver_id +
+                ", content_type=" + content_type +
+                ", content='" + content + '\'' +
+                ", path='" + path + '\'' +
+                ", length=" + length +
+                ", visible=" + visible +
+                ", timestamp='" + timestamp + '\'' +
+                ", status=" + status +
+                '}';
+    }
 
-    public ChatMessage(long id, long sender_id, long receiver_id, int content_type, String content, String file_name, int status)
+    public ChatMessage(long id, long sender_id, long receiver_id, int content_type, String content, String file_name, int length, int status)
     {
         this.id = id;
         this.sender_id = sender_id;
@@ -112,14 +147,16 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         this.content_type = content_type;
         this.content = content;
         this.path = file_name;
+        this.length = length;
         this.status = status;
         timestamp = TimeUtil.getCurrentTimeString();
     }
 
 
-    @Generated(hash = 96499247)
-    public ChatMessage(Long id, long chat_id, long sender_id, long receiver_id, int content_type, String content, String path,
-            int visible, String timestamp, int status) {
+    @Generated(hash = 225338819)
+    public ChatMessage(Long id, long chat_id, long sender_id, long receiver_id, int content_type, String content, String path, int length,
+                       int visible, String timestamp, int status)
+    {
         this.id = id;
         this.chat_id = chat_id;
         this.sender_id = sender_id;
@@ -127,6 +164,7 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         this.content_type = content_type;
         this.content = content;
         this.path = path;
+        this.length = length;
         this.visible = visible;
         this.timestamp = timestamp;
         this.status = status;
@@ -148,8 +186,10 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
                     return TEXT_SELF;
                 case IMAGE:
                     return IMAGE_SELF;
-                case VOICE:
-                    return VOICE_SELF;
+                case AUDIO:
+                    return AUDIO_SELF;
+                case FILE:
+                    return FILE_SELF;
             }
         } else {
             switch (content_type) {
@@ -157,11 +197,26 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
                     return TEXT_OTHER;
                 case IMAGE:
                     return IMAGE_OTHER;
-                case VOICE:
-                    return VOICE_OTHER;
+                case AUDIO:
+                    return AUDIO_OTHER;
+                case FILE:
+                    return FILE_OTHER;
             }
         }
         return TEXT_SELF;
+    }
+
+    public float getProgress()
+    {
+        return progress;
+    }
+
+    public void setProgress(float progress)
+    {
+        this.progress = progress;
+        if (onProgressListener != null) {
+            onProgressListener.onProgress(progress);
+        }
     }
 
     public int getStatus()
@@ -257,23 +312,6 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         this.visible = visible;
     }
 
-    @Override
-    public String toString()
-    {
-        return "ChatMessage{" +
-                "id=" + id +
-                ", chat_id=" + chat_id +
-                ", sender_id=" + sender_id +
-                ", receiver_id=" + receiver_id +
-                ", content_type=" + content_type +
-                ", content='" + content + '\'' +
-                ", path='" + path + '\'' +
-                ", visible=" + visible +
-                ", timestamp='" + timestamp + '\'' +
-                ", status=" + status +
-                '}';
-    }
-
 
     public long getChat_id()
     {
@@ -296,7 +334,35 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         this.path = path;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
+    }
+
+    public int getLength()
+    {
+        return this.length;
+    }
+
+    public void setLength(int length)
+    {
+        this.length = length;
+    }
+
+    @Transient
+    private OnProgressListener onProgressListener;
+
+    public OnProgressListener getOnProgressListener()
+    {
+        return onProgressListener;
+    }
+
+    public void setOnProgressListener(OnProgressListener onProgressListener)
+    {
+        this.onProgressListener = onProgressListener;
+    }
+
+    public interface OnProgressListener {
+        void onProgress(float progress);
     }
 }
