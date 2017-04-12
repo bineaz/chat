@@ -45,7 +45,7 @@ public class ChatFileDao extends AbstractDao<ChatFile, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"CHAT_FILE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"FILE_TYPE\" INTEGER NOT NULL ," + // 1: file_type
-                "\"FILE_NAME\" TEXT," + // 2: file_name
+                "\"FILE_NAME\" TEXT UNIQUE ," + // 2: file_name
                 "\"VALUE\" BLOB);"); // 3: value
     }
 

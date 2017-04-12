@@ -3,6 +3,7 @@ package com.by.communication.entity;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
 /**
  * Produced a lot of bug on 2017/4/7.
@@ -14,6 +15,7 @@ public class ChatFile {
     private Long id;
 
     private int    file_type;
+    @Unique
     private String file_name;
     private byte[] value;
 
@@ -31,7 +33,8 @@ public class ChatFile {
     }
 
     @Generated(hash = 661822897)
-    public ChatFile(Long id, int file_type, String file_name, byte[] value) {
+    public ChatFile(Long id, int file_type, String file_name, byte[] value)
+    {
         this.id = id;
         this.file_type = file_type;
         this.file_name = file_name;
@@ -89,7 +92,8 @@ public class ChatFile {
                 '}';
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 }

@@ -13,8 +13,18 @@ import com.by.communication.R;
 import com.by.communication.entity.ChatFile;
 import com.by.communication.entity.ChatMessage;
 import com.by.communication.gen.ChatFileDao;
+import com.by.communication.re.ObserverAdapter;
+import com.by.communication.re.SubscriberAdapter;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.List;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Produced a lot of bug on 2017/4/5.
@@ -57,19 +67,39 @@ public class ImageUtil {
 
         //数据库加载
         final ChatFileDao chatFileDao = App.getInstance().getDaoSession().getChatFileDao();
-        ChatFile chatFile = chatFileDao.queryBuilder().where(ChatFileDao.Properties.File_name.eq(path)).unique();
+        List<ChatFile> chatFileList = chatFileDao.queryBuilder().where(ChatFileDao.Properties.File_name.eq(path)).list();
 
-        if (chatFile != null) {
+        if (!chatFileList.isEmpty()) {
+            final ChatFile chatFile = chatFileList.get(0);
             Logger.e(chatFile);
-            byte[] bytes = chatFile.getValue();
 
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.RGB_565;
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+            Observable
+                    .create(new Observable.OnSubscribe<Bitmap>() {
+                        @Override
+                        public void call(Subscriber<? super Bitmap> subscriber)
+                        {
+                            byte[] bytes = chatFile.getValue();
 
-            bitmap = compressImage(bitmap);
-            cache.put(path, bitmap);
-            setBitmapWithRatio(imageView, bitmap, 150);
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inPreferredConfig = Bitmap.Config.RGB_565;
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+
+                            bitmap = compressImage(bitmap);
+                            subscriber.onNext(bitmap);
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new ObserverAdapter<Bitmap>() {
+
+                        @Override
+                        public void onNext(Bitmap bitmap)
+                        {
+                            cache.put(path, bitmap);
+                            setBitmapWithRatio(imageView, bitmap, 150);
+                        }
+                    });
+
 
             return;
         }
@@ -80,16 +110,37 @@ public class ImageUtil {
                 .placeholder(R.mipmap.default_img)
                 .into(new Target() {
                     @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from)
+                    public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from)
                     {
-                        chatFileDao.insertOrReplace(new ChatFile(
-                                ChatMessage.IMAGE,
-                                path,
-                                Util.convertBitmapToByte(bitmap)
-                        ));
-                        bitmap = compressImage(bitmap);
-                        cache.put(path, bitmap);
-                        setBitmapWithRatio(imageView, bitmap, 150);
+
+
+                        Observable
+                                .create(new Observable.OnSubscribe<Bitmap>() {
+                                    @Override
+                                    public void call(Subscriber<? super Bitmap> subscriber)
+                                    {
+                                        chatFileDao.insertOrReplace(new ChatFile(
+                                                ChatMessage.IMAGE,
+                                                path,
+                                                Util.convertBitmapToByte(bitmap)
+                                        ));
+                                        Bitmap b = compressImage(bitmap);
+                                        subscriber.onNext(b);
+                                    }
+                                })
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new ObserverAdapter<Bitmap>() {
+
+                                    @Override
+                                    public void onNext(Bitmap bitmap)
+                                    {
+                                        cache.put(path, bitmap);
+                                        setBitmapWithRatio(imageView, bitmap, 150);
+                                    }
+                                });
+
+
                     }
 
                     @Override

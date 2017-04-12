@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -93,8 +92,8 @@ public class ChatActivity extends IoActivity {
 
     @BindView(R.id.chatActivity_funcImageView)
     ImageView         funcImageView;
-    @BindView(R.id.chatActivity_inputTypeImageButton)
-    ImageButton       inputTypeImageButton;
+    @BindView(R.id.chatActivity_inputTypeImageView)
+    ImageView         inputTypeImageView;
     @BindView(R.id.chatActivity_recordVoiceButton)
     RecordVoiceButton recordVoiceButton;
     @BindView(R.id.chatActivity_fileImageView)
@@ -333,18 +332,20 @@ public class ChatActivity extends IoActivity {
         }
     };
 
-    @OnClick({R.id.chatActivity_inputTypeImageButton})
+    @OnClick({R.id.chatActivity_inputTypeImageView})
     public void click(View v)
     {
         switch (v.getId()) {
-            case R.id.chatActivity_inputTypeImageButton:
+            case R.id.chatActivity_inputTypeImageView:
 
                 if (editText.isShown()) {
                     editText.setVisibility(View.GONE);
                     recordVoiceButton.setVisibility(View.VISIBLE);
+                    inputTypeImageView.setImageResource(R.mipmap.keyboard);
                 } else {
                     editText.setVisibility(View.VISIBLE);
                     recordVoiceButton.setVisibility(View.GONE);
+                    inputTypeImageView.setImageResource(R.mipmap.ic_chat_voice);
                 }
 
                 break;
@@ -389,6 +390,7 @@ public class ChatActivity extends IoActivity {
         switch (type) {
             case ChatMessage.TEXT:
                 text = editText.getText().toString().trim();
+                temp_message.setContent(text);
                 editText.setText("");
                 break;
 
@@ -425,8 +427,7 @@ public class ChatActivity extends IoActivity {
                 break;
         }
 
-
-        temp_message.setLocal_root_path(file.getAbsolutePath());
+        temp_message.setLocal_root_path(file == null ? null : file.getAbsolutePath());
         chatMessageDao.insert(temp_message);
         chatMessageArrayList.add(temp_message);
 
@@ -586,7 +587,7 @@ public class ChatActivity extends IoActivity {
                                             @Override
                                             public void onError(Call call, Exception e, int id)
                                             {
-                                                Logger.d(TAG, e.getMessage());
+                                                Logger.d("load audio", e.getMessage());
                                             }
 
                                             @Override
