@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.by.cusoon.widget.DrawableLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:dl_cornerRadius="5dp"
+        app:dl_solidColor="@color/white">
+
+
+        <com.by.cusoon.widget.listView.InsetListView
+            android:id="@+id/dialog_listView"
+            style="@style/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+        </com.by.cusoon.widget.listView.InsetListView>
+    </com.by.cusoon.widget.DrawableLinearLayout>
+
+</LinearLayout>

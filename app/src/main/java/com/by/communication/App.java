@@ -1,6 +1,5 @@
 package com.by.communication;
 
-import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDexApplication;
 
@@ -9,6 +8,7 @@ import com.by.communication.gen.DaoMaster;
 import com.by.communication.gen.DaoSession;
 import com.by.communication.gen.UserDao;
 import com.by.communication.util.Usp;
+import com.by.communication.util.Util;
 
 /**
  * Produced a lot of bug on 2017/4/1.
@@ -67,13 +67,24 @@ public class App extends MultiDexApplication {
 
     public User getUser()
     {
+        if (user == null) {
+            initUser();
+            if (user == null) {
+                Util.toast(getApplicationContext(), getString(R.string.get_user_info_failed));
+            }
+        }
         return user;
     }
 
     public long getUserId()
     {
-        if (user == null)
-            return 0;
+        if (user == null) {
+            initUser();
+            if (user == null) {
+                Util.toast(getApplicationContext(), getString(R.string.get_user_info_failed));
+                return 0;
+            }
+        }
 
         return user.getId();
     }

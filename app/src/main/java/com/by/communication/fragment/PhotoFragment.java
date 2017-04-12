@@ -2,10 +2,7 @@ package com.by.communication.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.by.communication.App;
 import com.by.communication.R;
@@ -15,8 +12,6 @@ import com.by.communication.util.Util;
 import com.by.communication.widgit.imageView.photoView.PhotoView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Produced a lot of bug on 2017/4/11.

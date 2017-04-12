@@ -20,15 +20,27 @@
         android:layout_height="50dp"
         android:layout_alignTop="@id/chat_avatar"
         android:layout_toLeftOf="@id/chat_avatar"
-        android:src="@mipmap/skin_about_brand"/>
+        android:src="@mipmap/file"/>
+
+    <TextView
+        android:id="@+id/chat_fileNameTextView"
+        style="@style/textSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/chat_fileImageView"
+        android:layout_below="@id/chat_fileImageView"
+        android:layout_marginTop="2dp"
+        android:ellipsize="middle"
+        android:maxWidth="220dp"
+        android:singleLine="true"/>
 
     <ProgressBar
         android:id="@+id/chat_loadProgressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="120dp"
         android:layout_height="10dp"
-        android:layout_alignRight="@id/chat_fileImageView"
-        android:layout_below="@id/chat_fileImageView"
+        android:layout_alignRight="@id/chat_fileNameTextView"
+        android:layout_below="@id/chat_fileNameTextView"
         android:layout_marginTop="5dp"
         android:visibility="gone"/>
 

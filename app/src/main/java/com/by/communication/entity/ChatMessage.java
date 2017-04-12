@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.IntDef;
 
 import com.by.communication.App;
+import com.by.communication.util.ConstantUtil;
 import com.by.communication.util.TimeUtil;
 import com.by.communication.widgit.adapter.entity.MultiItemEntity;
 import com.google.gson.annotations.SerializedName;
@@ -13,6 +14,8 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Transient;
+
+import java.io.File;
 
 /**
  * Produced a lot of bug on 2017/3/31.
@@ -49,13 +52,16 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     private long   receiver_id;  //接受者id
     private int    content_type; //内容类型
     private String content;  //内容
+    private String local_root_path;
     private String path;
-    private int    length;    //音频长度
+    private int    length;    //文件长度
     private int visible = 1;
     private String timestamp;
 
     @Transient
     private float progress;
+    @Transient
+    private int   download_status;  //0不确定 1 没有下载  2 下载中 3 已下载
 
     private int status = SEND_SUCCESS;  //发送状态
 
@@ -131,10 +137,13 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
                 ", receiver_id=" + receiver_id +
                 ", content_type=" + content_type +
                 ", content='" + content + '\'' +
+                ", local_root_path='" + local_root_path + '\'' +
                 ", path='" + path + '\'' +
                 ", length=" + length +
                 ", visible=" + visible +
                 ", timestamp='" + timestamp + '\'' +
+                ", progress=" + progress +
+                ", download_status=" + download_status +
                 ", status=" + status +
                 '}';
     }
@@ -153,9 +162,9 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     }
 
 
-    @Generated(hash = 225338819)
-    public ChatMessage(Long id, long chat_id, long sender_id, long receiver_id, int content_type, String content, String path, int length,
-                       int visible, String timestamp, int status)
+    @Generated(hash = 88233212)
+    public ChatMessage(Long id, long chat_id, long sender_id, long receiver_id, int content_type, String content, String local_root_path,
+                       String path, int length, int visible, String timestamp, int status)
     {
         this.id = id;
         this.chat_id = chat_id;
@@ -163,6 +172,7 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         this.receiver_id = receiver_id;
         this.content_type = content_type;
         this.content = content;
+        this.local_root_path = local_root_path;
         this.path = path;
         this.length = length;
         this.visible = visible;
@@ -204,6 +214,24 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
             }
         }
         return TEXT_SELF;
+    }
+
+    public void setDownload_status(int download_status)
+    {
+        this.download_status = download_status;
+    }
+
+    public int getDownload_status()
+    {
+        if (download_status == 0) {
+            File file = new File(ConstantUtil.FILE_BASE_PATH + path);
+            if (file.exists()) {
+                download_status = 3;
+            } else {
+                download_status = 1;
+            }
+        }
+        return download_status;
     }
 
     public float getProgress()
@@ -351,6 +379,12 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
 
     @Transient
     private OnProgressListener onProgressListener;
+    @Transient
+    private boolean            isPlaying;
+    @Transient
+    private int                play_time;
+    @Transient
+    private OnPlayListener     onPlayListener;
 
     public OnProgressListener getOnProgressListener()
     {
@@ -362,7 +396,54 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         this.onProgressListener = onProgressListener;
     }
 
+    public String getLocal_root_path()
+    {
+        return this.local_root_path;
+    }
+
+    public void setLocal_root_path(String local_root_path)
+    {
+        this.local_root_path = local_root_path;
+    }
+
+    public boolean isPlaying()
+    {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing)
+    {
+        isPlaying = playing;
+    }
+
+    public int getPlay_time()
+    {
+        return play_time;
+    }
+
+    public void setPlay_time(int play_time)
+    {
+        this.play_time = play_time;
+        if (onPlayListener != null) {
+            onPlayListener.onPlay(play_time);
+        }
+    }
+
+    public OnPlayListener getOnPlayListener()
+    {
+        return onPlayListener;
+    }
+
+    public void setOnPlayListener(OnPlayListener onPlayListener)
+    {
+        this.onPlayListener = onPlayListener;
+    }
+
     public interface OnProgressListener {
         void onProgress(float progress);
+    }
+
+    public interface OnPlayListener {
+        void onPlay(int time);
     }
 }

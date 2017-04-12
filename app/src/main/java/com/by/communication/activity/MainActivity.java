@@ -20,11 +20,8 @@ import com.by.communication.fragment.FriendFragment;
 import com.by.communication.fragment.LogoutFragment;
 import com.by.communication.gen.ChatMessageDao;
 import com.by.communication.net.PushSocketService;
-import com.by.communication.net.okhttp.HttpUtil;
-import com.by.communication.net.okhttp.callback.StringCallback;
 import com.by.communication.re.ChatService;
 import com.by.communication.re.SubscriberAdapter;
-import com.by.communication.util.ConstantUtil;
 import com.by.communication.util.RetrofitUtil;
 import com.by.communication.util.Util;
 
@@ -32,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import okhttp3.Call;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 

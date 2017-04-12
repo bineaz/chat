@@ -1,15 +1,9 @@
 package com.by.communication.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.by.communication.App;
 import com.by.communication.R;

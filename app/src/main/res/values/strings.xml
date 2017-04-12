@@ -40,4 +40,9 @@
     <string name="not_supported">不支持</string>
     <string name="click_to_record">点击录音</string>
     <string name="cancel">取消</string>
+    <string name="get_user_info_failed">获取用户信息失败</string>
+    <string name="confirm">确定</string>
+    <string name="file_not_exist">文件不存在</string>
+    <string name="download">下载</string>
+    <string name="invalid_file">无效文件</string>
 </resources>

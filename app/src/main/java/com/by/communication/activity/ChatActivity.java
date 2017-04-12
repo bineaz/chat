@@ -4,14 +4,17 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,6 +28,7 @@ import com.by.communication.entity.ChatMessage;
 import com.by.communication.entity.Response;
 import com.by.communication.entity.User;
 import com.by.communication.fragment.PhotoFragment;
+import com.by.communication.fragment.dialog.AlertFragment;
 import com.by.communication.fragment.image.ImageItem;
 import com.by.communication.fragment.image.PickImageFragment;
 import com.by.communication.gen.ChatFileDao;
@@ -59,6 +63,7 @@ import org.greenrobot.greendao.query.WhereCondition;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -92,6 +97,8 @@ public class ChatActivity extends IoActivity {
     ImageButton       inputTypeImageButton;
     @BindView(R.id.chatActivity_recordVoiceButton)
     RecordVoiceButton recordVoiceButton;
+    @BindView(R.id.chatActivity_fileImageView)
+    ImageView         fileImageView;
 
     private ChatAdapter            chatAdapter;
     private ArrayList<ChatMessage> chatMessageArrayList;
@@ -247,7 +254,7 @@ public class ChatActivity extends IoActivity {
             }
         });
 
-        titleTextView.setOnClickListener(new View.OnClickListener() {
+        fileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -419,9 +426,9 @@ public class ChatActivity extends IoActivity {
         }
 
 
+        temp_message.setLocal_root_path(file.getAbsolutePath());
         chatMessageDao.insert(temp_message);
         chatMessageArrayList.add(temp_message);
-
 
         chatAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(chatMessageArrayList.size() - 1);
@@ -452,6 +459,7 @@ public class ChatActivity extends IoActivity {
                     public void onNext(Response<ChatMessage> chatMessageResponse)
                     {
                         ChatMessage chatMessage = chatMessageResponse.getData();
+                        chatMessage.setLocal_root_path(temp_message.getLocal_root_path());
 
                         chatMessage.setTimestamp(TimeUtil.covertToLocalTime(chatMessage.getTimestamp()));
 
@@ -464,9 +472,12 @@ public class ChatActivity extends IoActivity {
                             chatFileDao.update(chatFile);
 
                             temp_message.setPath(chatMessage.getPath());
-                        } else if (type == chatMessage.AUDIO) {
-
                         }
+//                        else if (type == chatMessage.AUDIO) {
+//
+//                        } else if (type == ChatMessage.FILE) {
+//
+//                        }
 
                         temp_message.setStatus(ChatMessage.SEND_SUCCESS);
                         chatAdapter.notifyDataSetChanged();
@@ -531,9 +542,9 @@ public class ChatActivity extends IoActivity {
 
                 case ChatMessage.AUDIO_SELF:
                 case ChatMessage.AUDIO_OTHER:
-                    TextView audioView = holder.getView(R.id.chat_audioView);
+                    final TextView audioView = holder.getView(R.id.chat_audioView);
 
-                    int l = message.getLength();
+                    final int l = message.getLength();
                     int dpw;
                     audioView.setText(l + "'");
 
@@ -547,45 +558,118 @@ public class ChatActivity extends IoActivity {
                     params.width = Util.dip2px(getApplicationContext(), dpw);
                     audioView.setLayoutParams(params);
 
+                    if (message.isPlaying()) {
+                        message.setOnPlayListener(new ChatMessage.OnPlayListener() {
+                            @Override
+                            public void onPlay(int time)
+                            {
+                                audioView.setText(message.getPlay_time() + "'");
+                            }
+                        });
+                    }
+
                     audioView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v)
                         {
                             if (voiceManager.isPlaying()) {
-                                voiceManager.continueOrPausePlay();
+                                voiceManager.stopPlay();
+                            }
+
+                            final String path = ConstantUtil.AUDIO_BASE_PATH + message.getPath();
+
+                            if (!new File(path).exists()) {
+                                HttpUtil.get()
+                                        .rawUrl(ConstantUtil.AUDIO_BASE_URL + message.getPath())
+                                        .build()
+                                        .execute(new FileCallBack(ConstantUtil.AUDIO_BASE_PATH, message.getPath()) {
+                                            @Override
+                                            public void onError(Call call, Exception e, int id)
+                                            {
+                                                Logger.d(TAG, e.getMessage());
+                                            }
+
+                                            @Override
+                                            public void onResponse(File response, int id)
+                                            {
+                                                Logger.d(TAG, message.getPath() + "downloaded");
+                                                playAudio(message, path);
+                                            }
+                                        });
                             } else {
-                                final String path = ConstantUtil.AUDIO_BASE_PATH + message.getPath();
+                                playAudio(message, path);
+                            }
 
-                                if (!new File(path).exists()) {
-                                    HttpUtil.get()
-                                            .rawUrl(ConstantUtil.AUDIO_BASE_URL + message.getPath())
-                                            .build()
-                                            .execute(new FileCallBack(ConstantUtil.AUDIO_BASE_PATH, message.getPath()) {
-                                                @Override
-                                                public void onError(Call call, Exception e, int id)
-                                                {
-                                                    Logger.d(TAG, e.getMessage());
-                                                }
+                        }
+                    });
+                    break;
 
-                                                @Override
-                                                public void onResponse(File response, int id)
-                                                {
-                                                    Logger.d(TAG, message.getPath() + "downloaded");
-                                                    playAudio(path);
-                                                }
-                                            });
+                case ChatMessage.FILE_SELF:
+                case ChatMessage.FILE_OTHER:
+
+                    TextView fileNameTextView = holder.getView(R.id.chat_fileNameTextView);
+                    ImageView fileImageView = holder.getView(R.id.chat_fileImageView);
+                    ImageView downloadImageView = holder.getView(R.id.chat_downloadImageView);
+
+                    String name = message.getPath();
+                    fileNameTextView.setText(name == null ? "unknown file" : name);
+
+                    fileImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            if (TextUtils.isEmpty(message.getLocal_root_path())) {
+                                if (TextUtils.isEmpty(message.getPath())) {
+                                    toast(getString(R.string.invalid_file));
+                                    return;
+                                }
+                                File file = new File(ConstantUtil.FILE_BASE_PATH, message.getPath());
+                                if (file.exists()) {
+                                    openFile(file);
                                 } else {
-                                    playAudio(path);
+                                    AlertFragment alertFragment = new AlertFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("info", getString(R.string.file_not_exist));
+                                    bundle.putString("confirmText", getString(R.string.download));
+                                    alertFragment.setArguments(bundle);
+                                    alertFragment.setOnConfirmListener(new AlertFragment.OnConfirmListener() {
+                                        @Override
+                                        public void onConfirm()
+                                        {
+                                            downloadFile(message);
+                                        }
+                                    });
+                                    alertFragment.show(getFragmentManager(), "");
+
+                                }
+
+                            } else {
+//                                Util.toast(getApplicationContext(), message.getLocal_root_path());
+                                File file = new File(message.getLocal_root_path());
+                                if (file.exists()) {
+                                    openFile(file);
                                 }
                             }
                         }
                     });
 
-                case ChatMessage.FILE_SELF:
-                case ChatMessage.FILE_OTHER:
+                    if (holder.getItemViewType() == ChatMessage.FILE_OTHER) {
+                        if (message.getDownload_status() == 3) {
+                            downloadImageView.setVisibility(View.GONE);
+                        } else {
+                            downloadImageView.setVisibility(View.VISIBLE);
+                            downloadImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    downloadFile(message);
+                                }
+                            });
+                        }
+                    }
 
-                    if (message.isSending()) {
-                        final ProgressBar p = holder.getView(R.id.chat_loadProgressBar);
+                    final ProgressBar p = holder.getView(R.id.chat_loadProgressBar);
+                    if (message.isSending() || message.getDownload_status() == 2) {
                         p.setVisibility(View.VISIBLE);
                         message.setOnProgressListener(new ChatMessage.OnProgressListener() {
                             @Override
@@ -594,7 +678,7 @@ public class ChatActivity extends IoActivity {
                                 int pro = (int) (progress * 100);
                                 p.setProgress(pro);
 
-                                if (pro==100){
+                                if (pro == 100) {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run()
@@ -606,6 +690,8 @@ public class ChatActivity extends IoActivity {
                                 }
                             }
                         });
+                    } else {
+                        p.setVisibility(View.GONE);
                     }
 
                     break;
@@ -620,8 +706,26 @@ public class ChatActivity extends IoActivity {
             switch (message.getStatus()) {
 
                 case ChatMessage.SENDING:
-                    progressBar.setVisibility(View.VISIBLE);
-                    retryImageView.setVisibility(View.GONE);
+//                    progressBar.setVisibility(View.VISIBLE);
+//                    retryImageView.setVisibility(View.GONE);
+
+//                    Observable.timer(20, TimeUnit.SECONDS)
+//                            .subscribeOn(Schedulers.newThread())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(new Action1<Long>() {
+//                                @Override
+//                                public void call(Long aLong)
+//                                {
+//                                    message.setStatus(ChatMessage.SEND_FAILED);
+//                                    chatMessageDao.update(message);
+//
+//                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//                                        if (!isDestroyed()) {
+//                                            chatAdapter.notifyDataSetChanged();
+//                                        }
+//                                    }
+//                                }
+//                            });
                     break;
 
                 case ChatMessage.SEND_SUCCESS:
@@ -648,20 +752,73 @@ public class ChatActivity extends IoActivity {
 
         }
 
-        private void playAudio(String path)
+        private void openFile(File file)
         {
+            Intent intent = new Intent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setAction(Intent.ACTION_VIEW);
+            String type = getMimeType(file);
+            intent.setDataAndType(/*uri*/Uri.fromFile(file), type);
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                toast("can not open file");
+            }
+        }
+
+        public String getMimeType(File file)
+        {
+            String suffix = getSuffix(file);
+            if (suffix == null) {
+                return "file/*";
+            }
+            String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(suffix);
+            if (type != null || !type.isEmpty()) {
+                return type;
+            }
+            return "file/*";
+        }
+
+        private String getSuffix(File file)
+        {
+            if (file == null || !file.exists() || file.isDirectory()) {
+                return null;
+            }
+            String fileName = file.getName();
+            if (fileName.equals("") || fileName.endsWith(".")) {
+                return null;
+            }
+            int index = fileName.lastIndexOf(".");
+            if (index != -1) {
+                return fileName.substring(index + 1).toLowerCase(Locale.US);
+            } else {
+                return null;
+            }
+        }
+
+
+        private void playAudio(final ChatMessage message, final String path)
+        {
+            for (int i = 0; i < chatMessageArrayList.size(); i++) {
+                chatMessageArrayList.get(i).setPlaying(false);
+            }
+            message.setPlaying(true);
+            chatAdapter.notifyDataSetChanged();
+
             voiceManager.startPlay(path);
             voiceManager.setVoicePlayListener(new VoiceManager.VoicePlayCallBack() {
                 @Override
                 public void voiceTotalLength(long time, String strTime)
                 {
-                    Logger.d("voice", time + "  " + strTime);
+                    Logger.d("voice", strTime);
+
                 }
 
                 @Override
                 public void playDoing(long time, String strTime)
                 {
-                    Logger.d("voice", time + "  " + strTime);
+                    Logger.d("voice", strTime);
+                    message.setPlay_time((int) time);
                 }
 
                 @Override
@@ -680,6 +837,8 @@ public class ChatActivity extends IoActivity {
                 public void playFinish()
                 {
                     Logger.d("voice", "finish");
+                    message.setPlay_time(message.getLength());
+                    message.setPlaying(false);
                 }
             });
         }
@@ -724,5 +883,45 @@ public class ChatActivity extends IoActivity {
                         }
                     });
         }
+
+        private void downloadFile(final ChatMessage message)
+        {
+            message.setDownload_status(2);
+            chatAdapter.notifyDataSetChanged();
+            HttpUtil.get().rawUrl(ConstantUtil.FILE_BASE_URL + message.getPath())
+                    .build()
+                    .execute(new FileCallBack(ConstantUtil.FILE_BASE_PATH, message.getPath()) {
+                        @Override
+                        public void onError(Call call, Exception e, int id)
+                        {
+                            message.setDownload_status(0);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                if (!isDestroyed())
+                                    chatAdapter.notifyDataSetChanged();
+                            }
+                            Logger.d(TAG, e.getMessage());
+                            toast("load failed");
+                        }
+
+                        @Override
+                        public void onResponse(File response, int id)
+                        {
+                            message.setDownload_status(3);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                if (!isDestroyed())
+                                    chatAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void inProgress(float progress, long total, int id)
+                        {
+                            message.setProgress(progress);
+                            Logger.d("progress", progress + "");
+                        }
+                    });
+        }
     }
+
+
 }

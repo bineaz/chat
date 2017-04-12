@@ -2,9 +2,6 @@ package com.by.communication.util;
 
 import android.util.Log;
 
-import com.by.communication.entity.ChatMessage;
-import com.by.communication.fragment.image.ImageItem;
-
 import java.util.ArrayList;
 
 /**

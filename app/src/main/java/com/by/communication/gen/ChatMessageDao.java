@@ -30,11 +30,12 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         public final static Property Receiver_id = new Property(3, long.class, "receiver_id", false, "RECEIVER_ID");
         public final static Property Content_type = new Property(4, int.class, "content_type", false, "CONTENT_TYPE");
         public final static Property Content = new Property(5, String.class, "content", false, "CONTENT");
-        public final static Property Path = new Property(6, String.class, "path", false, "PATH");
-        public final static Property Length = new Property(7, int.class, "length", false, "LENGTH");
-        public final static Property Visible = new Property(8, int.class, "visible", false, "VISIBLE");
-        public final static Property Timestamp = new Property(9, String.class, "timestamp", false, "TIMESTAMP");
-        public final static Property Status = new Property(10, int.class, "status", false, "STATUS");
+        public final static Property Local_root_path = new Property(6, String.class, "local_root_path", false, "LOCAL_ROOT_PATH");
+        public final static Property Path = new Property(7, String.class, "path", false, "PATH");
+        public final static Property Length = new Property(8, int.class, "length", false, "LENGTH");
+        public final static Property Visible = new Property(9, int.class, "visible", false, "VISIBLE");
+        public final static Property Timestamp = new Property(10, String.class, "timestamp", false, "TIMESTAMP");
+        public final static Property Status = new Property(11, int.class, "status", false, "STATUS");
     }
 
 
@@ -56,11 +57,12 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
                 "\"RECEIVER_ID\" INTEGER NOT NULL ," + // 3: receiver_id
                 "\"CONTENT_TYPE\" INTEGER NOT NULL ," + // 4: content_type
                 "\"CONTENT\" TEXT," + // 5: content
-                "\"PATH\" TEXT," + // 6: path
-                "\"LENGTH\" INTEGER NOT NULL ," + // 7: length
-                "\"VISIBLE\" INTEGER NOT NULL ," + // 8: visible
-                "\"TIMESTAMP\" TEXT," + // 9: timestamp
-                "\"STATUS\" INTEGER NOT NULL );"); // 10: status
+                "\"LOCAL_ROOT_PATH\" TEXT," + // 6: local_root_path
+                "\"PATH\" TEXT," + // 7: path
+                "\"LENGTH\" INTEGER NOT NULL ," + // 8: length
+                "\"VISIBLE\" INTEGER NOT NULL ," + // 9: visible
+                "\"TIMESTAMP\" TEXT," + // 10: timestamp
+                "\"STATUS\" INTEGER NOT NULL );"); // 11: status
     }
 
     /** Drops the underlying database table. */
@@ -87,18 +89,23 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
             stmt.bindString(6, content);
         }
  
+        String local_root_path = entity.getLocal_root_path();
+        if (local_root_path != null) {
+            stmt.bindString(7, local_root_path);
+        }
+ 
         String path = entity.getPath();
         if (path != null) {
-            stmt.bindString(7, path);
+            stmt.bindString(8, path);
         }
-        stmt.bindLong(8, entity.getLength());
-        stmt.bindLong(9, entity.getVisible());
+        stmt.bindLong(9, entity.getLength());
+        stmt.bindLong(10, entity.getVisible());
  
         String timestamp = entity.getTimestamp();
         if (timestamp != null) {
-            stmt.bindString(10, timestamp);
+            stmt.bindString(11, timestamp);
         }
-        stmt.bindLong(11, entity.getStatus());
+        stmt.bindLong(12, entity.getStatus());
     }
 
     @Override
@@ -119,18 +126,23 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
             stmt.bindString(6, content);
         }
  
+        String local_root_path = entity.getLocal_root_path();
+        if (local_root_path != null) {
+            stmt.bindString(7, local_root_path);
+        }
+ 
         String path = entity.getPath();
         if (path != null) {
-            stmt.bindString(7, path);
+            stmt.bindString(8, path);
         }
-        stmt.bindLong(8, entity.getLength());
-        stmt.bindLong(9, entity.getVisible());
+        stmt.bindLong(9, entity.getLength());
+        stmt.bindLong(10, entity.getVisible());
  
         String timestamp = entity.getTimestamp();
         if (timestamp != null) {
-            stmt.bindString(10, timestamp);
+            stmt.bindString(11, timestamp);
         }
-        stmt.bindLong(11, entity.getStatus());
+        stmt.bindLong(12, entity.getStatus());
     }
 
     @Override
@@ -147,11 +159,12 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
             cursor.getLong(offset + 3), // receiver_id
             cursor.getInt(offset + 4), // content_type
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // content
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // path
-            cursor.getInt(offset + 7), // length
-            cursor.getInt(offset + 8), // visible
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // timestamp
-            cursor.getInt(offset + 10) // status
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // local_root_path
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // path
+            cursor.getInt(offset + 8), // length
+            cursor.getInt(offset + 9), // visible
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // timestamp
+            cursor.getInt(offset + 11) // status
         );
         return entity;
     }
@@ -164,11 +177,12 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         entity.setReceiver_id(cursor.getLong(offset + 3));
         entity.setContent_type(cursor.getInt(offset + 4));
         entity.setContent(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setPath(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setLength(cursor.getInt(offset + 7));
-        entity.setVisible(cursor.getInt(offset + 8));
-        entity.setTimestamp(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setStatus(cursor.getInt(offset + 10));
+        entity.setLocal_root_path(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setPath(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setLength(cursor.getInt(offset + 8));
+        entity.setVisible(cursor.getInt(offset + 9));
+        entity.setTimestamp(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setStatus(cursor.getInt(offset + 11));
      }
     
     @Override

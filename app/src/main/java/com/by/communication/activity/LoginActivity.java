@@ -1,20 +1,10 @@
 package com.by.communication.activity;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.by.communication.App;
@@ -24,15 +14,12 @@ import com.by.communication.entity.User;
 import com.by.communication.gen.UserDao;
 import com.by.communication.net.okhttp.HttpUtil;
 import com.by.communication.re.UserService;
-import com.by.communication.util.Logger;
 import com.by.communication.util.Usp;
-import com.by.communication.util.Util;
 
 import butterknife.BindView;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;

@@ -16,9 +16,6 @@ import com.by.communication.gen.ChatFileDao;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
 /**
  * Produced a lot of bug on 2017/4/5.
  */

@@ -178,7 +178,7 @@ public class User implements Parcelable {
     {
         if (obj instanceof User) {
             User u = (User) obj;
-            return u.getId() == id;
+            return u.getId().equals(id);
         }
         return super.equals(obj);
     }

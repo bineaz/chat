@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.by.communication.App;
 import com.by.communication.R;
 import com.by.communication.entity.User;
+import com.by.communication.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,5 +75,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     public long getUser_id()
     {
         return user_id;
+    }
+
+    public void toast(String message)
+    {
+        Util.toast(getApplicationContext(), message);
     }
 }

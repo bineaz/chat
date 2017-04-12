@@ -2,7 +2,6 @@ package com.by.communication.net.okhttp.builder;
 
 import com.by.communication.net.okhttp.request.RequestCall;
 import com.by.communication.util.ConstantUtil;
-import com.by.communication.util.Logger;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

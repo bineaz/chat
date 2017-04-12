@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:layout_widthPercent="100%">
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/textMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="message"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_divider_height"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/color_cccccc"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <com.by.communication.widgit.textView.DrawableTextView
+                android:id="@+id/cancelTextView"
+                style="@style/textMedium"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                app:dt_touchSolidColor="@color/list_divider_color"/>
+
+            <View
+                android:layout_width="@dimen/list_divider_height"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:background="@color/color_cccccc"/>
+
+            <com.by.communication.widgit.textView.DrawableTextView
+                android:id="@+id/confirmTextView"
+                style="@style/textMedium"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/confirm"
+                app:dt_touchSolidColor="@color/list_divider_color"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.percent.PercentFrameLayout>

@@ -6,16 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.by.communication.App;
-
-import org.greenrobot.greendao.AbstractDao;
-import org.greenrobot.greendao.Property;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

@@ -19,26 +19,49 @@
         android:layout_height="50dp"
         android:layout_alignTop="@id/chat_avatar"
         android:layout_toRightOf="@id/chat_avatar"
-        android:src="@mipmap/skin_about_brand"/>
+        android:src="@mipmap/file"/>
+
+    <ImageView
+        android:id="@+id/chat_downloadImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@id/chat_fileImageView"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/chat_fileImageView"
+        android:src="@mipmap/download"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/chat_fileNameTextView"
+        style="@style/textSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/chat_fileImageView"
+        android:layout_below="@id/chat_fileImageView"
+        android:layout_marginTop="2dp"
+        android:ellipsize="middle"
+        android:maxWidth="220dp"
+        android:singleLine="true"/>
 
     <ProgressBar
         android:id="@+id/chat_loadProgressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="120dp"
         android:layout_height="10dp"
-        android:visibility="gone"
-        android:layout_alignLeft="@id/chat_fileImageView"
-        android:layout_below="@id/chat_fileImageView"
-        android:layout_marginTop="5dp"/>
+        android:layout_alignLeft="@id/chat_fileNameTextView"
+        android:layout_below="@id/chat_fileNameTextView"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"/>
+
 
     <ProgressBar
         android:id="@+id/chat_progressBar"
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignTop="@id/chat_fileImageView"
+        android:layout_alignTop="@id/chat_fileNameTextView"
         android:layout_margin="5dp"
-        android:layout_toRightOf="@id/chat_fileImageView"
+        android:layout_toRightOf="@id/chat_fileNameTextView"
         android:visibility="gone"/>
 
     <ImageView

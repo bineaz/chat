@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.by.communication.R;
 import com.by.communication.util.Util;
 
 import java.io.File;
@@ -468,7 +469,7 @@ public class VoiceManager {
             if (voicePlayCallBack != null) {
                 voicePlayCallBack.playFinish();
             }
-            Toast.makeText(mContext, "文件不存在", Toast.LENGTH_SHORT).show();
+            Util.toast(mContext, mContext.getString(R.string.file_not_exist));
             return;
         } else {
             playFilePath = filePath;
@@ -557,10 +558,15 @@ public class VoiceManager {
      */
     public void stopPlay()
     {
+        if (voicePlayCallBack != null) {
+            voicePlayCallBack.playFinish();
+        }
         mHandler.removeMessages(MSG_TIME_INTERVAL);
         mDeviceState = MEDIA_STATE_PLAY_STOP;
         stopMedia(mMediaPlayer, true);
         mMediaPlayer = null;
+
+
     }
 
     /**

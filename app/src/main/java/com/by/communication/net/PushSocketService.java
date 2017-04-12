@@ -20,7 +20,6 @@ import com.by.communication.util.ConstantUtil;
 import com.by.communication.util.Logger;
 import com.by.communication.util.TimeUtil;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
@@ -213,7 +212,7 @@ public class PushSocketService extends Service {
                     @Override
                     public void onResponse(String response, int id)
                     {
-                        Logger.d("socket", response.toString());
+                        Logger.d("socket", response);
                         loadHistory();
                     }
                 });

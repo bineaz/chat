@@ -13,9 +13,10 @@ import com.by.communication.entity.ChatMessage;
 import com.by.communication.entity.ChatRecord;
 import com.by.communication.entity.Response;
 import com.by.communication.gen.ChatMessageDao;
-import com.by.communication.net.okhttp.HttpUtil;
 import com.by.communication.re.ChatService;
+import com.by.communication.re.SubscriberAdapter;
 import com.by.communication.util.ImageUtil;
+import com.by.communication.util.Logger;
 import com.by.communication.util.RetrofitUtil;
 import com.by.communication.util.Usp;
 import com.by.communication.widgit.listView.InsetListView;
@@ -26,10 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -57,36 +54,45 @@ public class ChatRecordFragment extends BaseFragment {
         adapter = new ChatAdapter(chatRecordArrayList);
         listView.setAdapter(adapter);
 
-        RetrofitUtil.getInstance()
-                .service(ChatService.class)
-                .getChatMessageHistory(Usp.getInstance().getUserId(), 0)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Response<List<ChatMessage>>>() {
-                    @Override
-                    public void onCompleted()
-                    {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(Response<List<ChatMessage>> response)
-                    {
-                        if (response.getCode() == response.CODE_SUCCESS) {
-                            ChatMessageDao chatMessageDao = App.getInstance().getDaoSession().getChatMessageDao();
-
-                            chatMessageDao.insertOrReplaceInTx(response.getData());
-
-
-                        }
-                    }
-                });
+//        final long max_message_id;
+//        ChatMessageDao chatMessageDao = App.getInstance().getDaoSession().getChatMessageDao();
+//        ChatMessage c = chatMessageDao.queryBuilder()
+//                .orderDesc(ChatMessageDao.Properties.Id)
+//                .limit(1)
+//                .unique();
+//
+//        if (c != null) {
+//            max_message_id = c.getId();
+//        } else {
+//            max_message_id = 0;
+//        }
+//
+//        Logger.d("max_id", "" + max_message_id);
+//
+//        RetrofitUtil.getInstance()
+//                .service(ChatService.class)
+//                .getChatMessageHistory(Usp.getInstance().getUserId(), max_message_id)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SubscriberAdapter<Response<List<ChatMessage>>>() {
+//                    @Override
+//                    public void onCompleted()
+//                    {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(Response<List<ChatMessage>> response)
+//                    {
+//                        if (response.getCode() == response.CODE_SUCCESS) {
+//                            ChatMessageDao chatMessageDao = App.getInstance().getDaoSession().getChatMessageDao();
+//
+//                            chatMessageDao.insertOrReplaceInTx(response.getData());
+//
+//
+//                        }
+//                    }
+//                });
 
 //        Retrofit retrofit = new Retrofit.Builder()
 //                .baseUrl("http://chat.tangcheng.me/index.php/Chat/")
