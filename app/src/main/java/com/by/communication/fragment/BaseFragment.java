@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.by.communication.util.Util;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -66,5 +68,10 @@ public abstract class BaseFragment extends Fragment {
     {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public void toast(String message)
+    {
+        Util.toast(getActivity(), message);
     }
 }

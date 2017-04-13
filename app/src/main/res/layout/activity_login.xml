@@ -10,7 +10,6 @@
                 android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
@@ -68,7 +67,6 @@
                     android:textSize="14sp"/>
 
                 <ImageView
-                    android:id="@+id/iv_clean_phone"
                     android:layout_width="40dp"
                     android:layout_height="fill_parent"
                     android:scaleType="centerInside"
@@ -110,7 +108,6 @@
                     android:textSize="14sp"/>
 
                 <ImageView
-                    android:id="@+id/clean_password"
                     android:layout_width="40dp"
                     android:layout_height="fill_parent"
                     android:scaleType="centerInside"
@@ -118,7 +115,6 @@
                     android:visibility="gone"/>
 
                 <ImageView
-                    android:id="@+id/iv_show_pwd"
                     android:layout_width="40dp"
                     android:layout_height="fill_parent"
                     android:scaleType="centerInside"
@@ -148,7 +144,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/regist"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -159,7 +154,6 @@
                     android:textSize="14sp"/>
 
                 <TextView
-                    android:id="@+id/forget_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -175,7 +169,6 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/service"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

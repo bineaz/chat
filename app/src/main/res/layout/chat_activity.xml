@@ -112,6 +112,13 @@
                     android:src="@mipmap/image"/>
 
                 <ImageView
+                    android:id="@+id/chatActivity_videoImageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="7dp"
+                    android:src="@mipmap/video"/>
+
+                <ImageView
                     android:id="@+id/chatActivity_fileImageView"
                     android:layout_width="50dp"
                     android:layout_height="50dp"

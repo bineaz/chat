@@ -4,18 +4,11 @@
     <string name="loading">正在加载中...</string>
     <string name="load_failed">加载失败，请点我重试</string>
     <string name="load_end">没有更多数据</string>
-    <string name="invalid_password">无效密码</string>
 
     <string name="hint_login_username">请输入手机号码</string>
     <string name="hint_login_password">输入密码</string>
     <string name="login">登录</string>
     <string name="forget_pwd">忘记密码</string>
-    <string name="please_input_limit_pwd">请输入数字或字母</string>
-
-    <string name="msg_operation_canceled">"操作被取消"</string>
-    <string name="tip_permission_camera">没有使用相机的权限，请在权限管理中开启</string>
-    <string name="tip_permission_storage">没有使用SD卡的权限，请在权限管理中开启</string>
-    <string name="tip_permission_camera_storage">没有使用相机和SD卡的权限，请在权限管理中开启</string>
 
     <string name="permission_cancel">取消</string>
     <string name="permission_setting">去设置</string>
@@ -45,4 +38,7 @@
     <string name="file_not_exist">文件不存在</string>
     <string name="download">下载</string>
     <string name="invalid_file">无效文件</string>
+    <string name="file_to_large">文件过大</string>
+    <string name="download_failed">下载失败</string>
+
 </resources>

@@ -1,6 +1,8 @@
 package com.by.communication;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.support.multidex.MultiDexApplication;
 
 import com.by.communication.entity.User;
@@ -9,6 +11,9 @@ import com.by.communication.gen.DaoSession;
 import com.by.communication.gen.UserDao;
 import com.by.communication.util.Usp;
 import com.by.communication.util.Util;
+import com.yixia.camera.VCamera;
+
+import java.io.File;
 
 /**
  * Produced a lot of bug on 2017/4/1.
@@ -32,6 +37,7 @@ public class App extends MultiDexApplication {
         instance = this;
 
         setDatabase();
+        initSmallVideo(this);
     }
 
     public static App getInstance()
@@ -98,5 +104,14 @@ public class App extends MultiDexApplication {
     {
         UserDao userDao = mDaoSession.getUserDao();
         user = userDao.load(Usp.getInstance().getUserId());
+    }
+
+    public void initSmallVideo(Context context)
+    {
+        VCamera.setVideoCachePath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Chat/videoRecord/");
+        // 开启log输出,ffmpeg输出到logcat
+        VCamera.setDebugMode(false);
+        // 初始化拍摄SDK，必须
+        VCamera.initialize(this);
     }
 }

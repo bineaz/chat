@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionBarHeight"
         android:background="@color/db32323d"
@@ -32,7 +31,6 @@
             android:background="#cc111111" />
 
         <TextView
-            android:id="@+id/tv_title_count"
             style="@style/textMedium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -42,7 +40,6 @@
             android:textColor="@color/white" />
 
         <TextView
-            android:id="@+id/btn_ok"
             style="@style/titleButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

@@ -11,7 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
@@ -47,6 +49,7 @@ import com.by.communication.util.FragmentUtil;
 import com.by.communication.util.ImageUtil;
 import com.by.communication.util.Logger;
 import com.by.communication.util.RetrofitUtil;
+import com.by.communication.util.ThreadUtil;
 import com.by.communication.util.TimeUtil;
 import com.by.communication.util.Util;
 import com.by.communication.util.an.compress.Luban;
@@ -54,6 +57,8 @@ import com.by.communication.util.an.compress.OnCompressListener;
 import com.by.communication.widgit.adapter.BaseMultiItemQuickAdapter;
 import com.by.communication.widgit.adapter.BaseViewHolder;
 import com.by.communication.widgit.layout.MyLinearLayout;
+import com.yixia.camera.demo.ui.record.MediaRecorderActivity;
+import com.yixia.camera.demo.ui.widget.SurfaceVideoView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -72,6 +77,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -80,6 +86,7 @@ import rx.schedulers.Schedulers;
 
 public class ChatActivity extends IoActivity {
 
+    private static final int CODE_TAKE_VIDEO = 7001;
     @BindView(R.id.chatActivity_linearLayout)
     MyLinearLayout linearLayout;
     @BindView(R.id.chat_recyclerView)
@@ -98,6 +105,8 @@ public class ChatActivity extends IoActivity {
     RecordVoiceButton recordVoiceButton;
     @BindView(R.id.chatActivity_fileImageView)
     ImageView         fileImageView;
+    @BindView(R.id.chatActivity_videoImageView)
+    ImageView         videoImageView;
 
     private ChatAdapter            chatAdapter;
     private ArrayList<ChatMessage> chatMessageArrayList;
@@ -111,6 +120,8 @@ public class ChatActivity extends IoActivity {
     private LinearLayoutManager manager;
 
     private VoiceManager voiceManager;
+
+    private long group_id = -1;
 
     @Override
     public int getLayoutResId()
@@ -264,6 +275,16 @@ public class ChatActivity extends IoActivity {
             }
         });
 
+        videoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                // 录制
+                Intent intent = new Intent(getApplicationContext(), MediaRecorderActivity.class);
+                startActivityForResult(intent, CODE_TAKE_VIDEO);
+            }
+        });
+
         recordVoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -279,6 +300,26 @@ public class ChatActivity extends IoActivity {
                 }
             }
         });
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                sendTextView.setEnabled(count > 0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+
+            }
+        });
     }
 
     @Override
@@ -289,9 +330,29 @@ public class ChatActivity extends IoActivity {
                 Uri uri = data.getData();
 
                 File file = new File(uri.getPath());
-                sendMessage(ChatMessage.FILE, file, (int) file.length());
 
-//                System.out.println(uri.getPath().toString() + "  " + file.length());
+                if (file.length() > 5 * 1024 * 1024) {
+                    toast(getString(R.string.file_to_large) + "  上限5MB");
+                    return;
+                }
+
+                sendMessage(ChatMessage.FILE, file, (int) file.length());
+            } else if (requestCode == CODE_TAKE_VIDEO) {
+                String path = data.getStringExtra("mPath");
+
+                File file = new File(path);
+
+                System.out.println(path);
+                if (!file.exists()) {
+                    return;
+                }
+
+                if (file.length() > 5 * 1024 * 1024) {
+                    toast(getString(R.string.file_to_large) + "  上限5MB");
+                    return;
+                }
+
+                sendMessage(ChatMessage.VIDEO, file, (int) file.length());
             }
         }
     }
@@ -354,6 +415,7 @@ public class ChatActivity extends IoActivity {
 
     private void sendMessage(final int type, final File file, int length)
     {
+
         String text = "";
         String file_name = file == null ? null : file.getName();
 
@@ -412,6 +474,7 @@ public class ChatActivity extends IoActivity {
                 break;
 
             case ChatMessage.FILE:
+            case ChatMessage.VIDEO:
 
                 requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
                 FileRequestBody body = new FileRequestBody(requestBody, new RetrofitCallback() {
@@ -511,10 +574,12 @@ public class ChatActivity extends IoActivity {
             addItemType(ChatMessage.AUDIO_OTHER, R.layout.chat_audio_other);
             addItemType(ChatMessage.FILE_SELF, R.layout.chat_file_self);
             addItemType(ChatMessage.FILE_OTHER, R.layout.chat_file_other);
+            addItemType(ChatMessage.VIDEO_SELF, R.layout.chat_video_self);
+            addItemType(ChatMessage.VIDEO_OTHER, R.layout.chat_video_other);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, final ChatMessage message)
+        protected void convert(final BaseViewHolder holder, final ChatMessage message)
         {
             switch (holder.getItemViewType()) {
 
@@ -694,6 +759,48 @@ public class ChatActivity extends IoActivity {
                     } else {
                         p.setVisibility(View.GONE);
                     }
+
+                    break;
+
+                case ChatMessage.VIDEO_SELF:
+                case ChatMessage.VIDEO_OTHER:
+                    final SurfaceVideoView videoView = holder.getView(R.id.chat_videoView);
+
+
+                    videoView.setVideoPath(ConstantUtil.FILE_BASE_URL + message.getPath());
+                    videoView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            File file = new File(ConstantUtil.FILE_BASE_PATH + message.getPath());
+                            if (file.exists()) {
+                                videoView.start();
+                            } else {
+                                downloadFile(message);
+                                final ProgressBar lp = holder.getView(R.id.chat_loadProgressBar);
+                                message.setOnProgressListener(new ChatMessage.OnProgressListener() {
+                                    @Override
+                                    public void onProgress(float progress)
+                                    {
+                                        lp.setProgress((int) (message.getProgress() * 100));
+                                        if (progress == 100) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run()
+                                                {
+                                                    lp.setVisibility(View.GONE);
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                });
+
+                            }
+
+                        }
+                    });
+
 
                     break;
             }
@@ -888,7 +995,14 @@ public class ChatActivity extends IoActivity {
         private void downloadFile(final ChatMessage message)
         {
             message.setDownload_status(2);
-            chatAdapter.notifyDataSetChanged();
+            ThreadUtil.mainThreadDelay(800, new Action1<Long>() {
+                @Override
+                public void call(Long aLong)
+                {
+                    chatAdapter.notifyDataSetChanged();
+                }
+            });
+
             HttpUtil.get().rawUrl(ConstantUtil.FILE_BASE_URL + message.getPath())
                     .build()
                     .execute(new FileCallBack(ConstantUtil.FILE_BASE_PATH, message.getPath()) {
@@ -901,7 +1015,7 @@ public class ChatActivity extends IoActivity {
                                     chatAdapter.notifyDataSetChanged();
                             }
                             Logger.d(TAG, e.getMessage());
-                            toast("load failed");
+                            toast(getString(R.string.download_failed));
                         }
 
                         @Override

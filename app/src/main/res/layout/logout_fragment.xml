@@ -7,7 +7,20 @@
     <Button
         android:id="@+id/logoutFragment_button"
         style="@style/textLarge"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
         android:text="注销"/>
+
+    <Button
+        android:id="@+id/logoutFragment_camera"
+        style="@style/textLarge"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="拍摄"/>
+
+
 </LinearLayout>

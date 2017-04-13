@@ -51,7 +51,11 @@
 
         <activity android:name=".activity.MainActivity">
 
+
         </activity>
+        <activity android:name="com.yixia.camera.demo.ui.record.MediaRecorderActivity"/>
+        <activity android:name="com.yixia.camera.demo.ui.record.VideoPlayerActivity"/>
+
 
         <service android:name=".net.PushSocketService">
             <intent-filter>

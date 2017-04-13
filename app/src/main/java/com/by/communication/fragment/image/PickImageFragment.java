@@ -123,7 +123,7 @@ public class PickImageFragment extends BaseFragment implements OnImagesLoadedLis
         btnDir = (Button) contentView.findViewById(R.id.btn_dir);
         mGridView = (GridView) contentView.findViewById(R.id.gridview);
 
-        mImagePresenter = new PicassoImgLoader();
+        mImagePresenter = new GlideImgLoader();
 
         DataSource dataSource = new LocalDataSource(mContext);
         dataSource.provideMediaItems(this);//select all images from local database

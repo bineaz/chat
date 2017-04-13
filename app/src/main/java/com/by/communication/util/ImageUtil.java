@@ -3,20 +3,19 @@ package com.by.communication.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.util.LruCache;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.by.communication.App;
 import com.by.communication.R;
 import com.by.communication.entity.ChatFile;
 import com.by.communication.entity.ChatMessage;
 import com.by.communication.gen.ChatFileDao;
 import com.by.communication.re.ObserverAdapter;
-import com.by.communication.re.SubscriberAdapter;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class ImageUtil {
 
     public static void displayAvatar(Context context, ImageView imageView, long user_id)
     {
-        Picasso.with(context).load(R.mipmap.icon).into(imageView);
+        Glide.with(context).load(R.mipmap.icon).into(imageView);
     }
 
     public static void setBitmapWithRatio(ImageView imageView, Bitmap bitmap, int width)
@@ -86,6 +85,10 @@ public class ImageUtil {
 
                             bitmap = compressImage(bitmap);
                             subscriber.onNext(bitmap);
+                            Glide.with(imageView.getContext())
+                                    .fromBytes()
+                                    .load(bytes)
+                                    .into(imageView);
                         }
                     })
                     .subscribeOn(Schedulers.io())
@@ -104,16 +107,16 @@ public class ImageUtil {
             return;
         }
 
+
         //网络加载
-        Picasso.with(imageView.getContext())
+        Glide.with(imageView.getContext())
                 .load(ConstantUtil.IMAGE_BASE_URL + path)
+                .asBitmap()
                 .placeholder(R.mipmap.default_img)
-                .into(new Target() {
+                .into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from)
+                    public void onResourceReady(final Bitmap bitmap, GlideAnimation glideAnimation)
                     {
-
-
                         Observable
                                 .create(new Observable.OnSubscribe<Bitmap>() {
                                     @Override
@@ -139,19 +142,6 @@ public class ImageUtil {
                                         setBitmapWithRatio(imageView, bitmap, 150);
                                     }
                                 });
-
-
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable)
-                    {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable)
-                    {
 
                     }
                 });

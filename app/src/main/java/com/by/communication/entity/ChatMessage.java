@@ -28,16 +28,19 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     public static final int IMAGE = 12;
     public static final int AUDIO = 13;
     public static final int FILE  = 14;
+    public static final int VIDEO = 15;
 
     public static final int TEXT_SELF  = 101;
     public static final int IMAGE_SELF = 102;
     public static final int AUDIO_SELF = 103;
     public static final int FILE_SELF  = 104;
+    public static final int VIDEO_SELF = 105;
 
     public static final int TEXT_OTHER  = 201;
     public static final int IMAGE_OTHER = 202;
     public static final int AUDIO_OTHER = 203;
     public static final int FILE_OTHER  = 204;
+    public static final int VIDEO_OTHER = 205;
 
     public static final int SENDING      = 21;
     public static final int SEND_SUCCESS = 22;
@@ -200,6 +203,8 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
                     return AUDIO_SELF;
                 case FILE:
                     return FILE_SELF;
+                case VIDEO:
+                    return VIDEO_SELF;
             }
         } else {
             switch (content_type) {
@@ -211,6 +216,8 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
                     return AUDIO_OTHER;
                 case FILE:
                     return FILE_OTHER;
+                case VIDEO:
+                    return VIDEO_OTHER;
             }
         }
         return TEXT_SELF;
