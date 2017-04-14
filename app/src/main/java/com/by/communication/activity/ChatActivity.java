@@ -3,6 +3,7 @@ package com.by.communication.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,13 +53,12 @@ import com.by.communication.util.RetrofitUtil;
 import com.by.communication.util.ThreadUtil;
 import com.by.communication.util.TimeUtil;
 import com.by.communication.util.Util;
-import com.by.communication.util.an.compress.Luban;
-import com.by.communication.util.an.compress.OnCompressListener;
+import com.by.communication.util.compress.Luban;
+import com.by.communication.util.compress.OnCompressListener;
 import com.by.communication.widgit.adapter.BaseMultiItemQuickAdapter;
 import com.by.communication.widgit.adapter.BaseViewHolder;
 import com.by.communication.widgit.layout.MyLinearLayout;
-import com.yixia.camera.demo.ui.record.MediaRecorderActivity;
-import com.yixia.camera.demo.ui.widget.SurfaceVideoView;
+import com.by.communication.widgit.view.SurfaceVideoView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -766,15 +766,58 @@ public class ChatActivity extends IoActivity {
                 case ChatMessage.VIDEO_OTHER:
                     final SurfaceVideoView videoView = holder.getView(R.id.chat_videoView);
 
+                    final ImageView thumbView = holder.getView(R.id.chat_imageThumbView);
+                    final ImageView playImageView = holder.getView(R.id.chat_playVideoImageView);
 
-                    videoView.setVideoPath(ConstantUtil.FILE_BASE_URL + message.getPath());
+                    playImageView.setVisibility(View.VISIBLE);
+                    thumbView.setVisibility(View.VISIBLE);
+                    ImageUtil.displayVideoThumb(getApplicationContext(), thumbView, message);
+
                     videoView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v)
                         {
-                            File file = new File(ConstantUtil.FILE_BASE_PATH + message.getPath());
+                            if (videoView.isPlaying()) {
+                                videoView.pause();
+                            }
+                        }
+                    });
+
+                    playImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(final View v)
+                        {
+                            File file;
+                            if (!TextUtils.isEmpty(message.getLocal_root_path())) {
+                                file = new File(message.getLocal_root_path());
+                                if (!file.exists()) {
+                                    file = new File(ConstantUtil.FILE_BASE_PATH + message.getPath());
+                                }
+                            } else {
+                                file = new File(ConstantUtil.FILE_BASE_PATH + message.getPath());
+                            }
+
+
                             if (file.exists()) {
+                                videoView.setVideoPath(file.getAbsolutePath());
+                                playImageView.setVisibility(View.GONE);
+                                thumbView.setVisibility(View.GONE);
                                 videoView.start();
+                                videoView.setOnPlayStateListener(new SurfaceVideoView.OnPlayStateListener() {
+                                    @Override
+                                    public void onStateChanged(boolean isPlaying)
+                                    {
+                                        playImageView.setVisibility(isPlaying ? View.GONE : View.VISIBLE);
+                                    }
+                                });
+                                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp)
+                                    {
+                                        playImageView.setVisibility(View.VISIBLE);
+                                    }
+                                });
+
                             } else {
                                 downloadFile(message);
                                 final ProgressBar lp = holder.getView(R.id.chat_loadProgressBar);
@@ -1015,7 +1058,7 @@ public class ChatActivity extends IoActivity {
                                     chatAdapter.notifyDataSetChanged();
                             }
                             Logger.d(TAG, e.getMessage());
-                            toast(getString(R.string.download_failed));
+                            toast(R.string.download_failed);
                         }
 
                         @Override
@@ -1023,8 +1066,10 @@ public class ChatActivity extends IoActivity {
                         {
                             message.setDownload_status(3);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                if (!isDestroyed())
+                                if (!isDestroyed()) {
                                     chatAdapter.notifyDataSetChanged();
+                                    toast(R.string.download_success);
+                                }
                             }
                         }
 

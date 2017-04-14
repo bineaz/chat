@@ -5,6 +5,8 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Unique;
 
+import java.util.Arrays;
+
 /**
  * Produced a lot of bug on 2017/4/7.
  */
@@ -88,7 +90,7 @@ public class ChatFile {
                 "id=" + id +
                 ", file_type=" + file_type +
                 ", file_name='" + file_name + '\'' +
-                ", value='" + value + '\'' +
+                ", value='" + Arrays.toString(value) + '\'' +
                 '}';
     }
 

@@ -41,4 +41,12 @@
     <string name="file_to_large">文件过大</string>
     <string name="download_failed">下载失败</string>
 
+    <string name="hint">提示</string>
+    <string name="imageView_content_description"></string>
+    <string name="record_camera_progress_message">正在转码…</string>
+    <string name="record_camera_exit_dialog_message">取消录制视频?</string>
+    <string name="record_camera_cancel_dialog_yes">确定</string>
+    <string name="record_camera_cancel_dialog_no">取消</string>
+    <string name="record_video_transcoding_faild">视频转码失败</string>
+    <string name="download_success">下载成功</string>
 </resources>

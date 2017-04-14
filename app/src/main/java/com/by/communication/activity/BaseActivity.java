@@ -2,6 +2,7 @@ package com.by.communication.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -80,5 +81,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void toast(String message)
     {
         Util.toast(getApplicationContext(), message);
+    }
+
+    public void toast(@StringRes int message)
+    {
+        Util.toast(getApplicationContext(), getString(message));
     }
 }

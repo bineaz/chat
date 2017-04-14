@@ -1,4 +1,4 @@
-package com.by.communication.util.an.compress;
+package com.by.communication.util.compress;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,7 +20,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-import static com.by.communication.util.an.compress.Preconditions.checkNotNull;
+import static com.by.communication.util.compress.Preconditions.checkNotNull;
 
 public class Luban {
 

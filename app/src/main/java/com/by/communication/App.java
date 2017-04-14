@@ -11,9 +11,8 @@ import com.by.communication.gen.DaoSession;
 import com.by.communication.gen.UserDao;
 import com.by.communication.util.Usp;
 import com.by.communication.util.Util;
-import com.yixia.camera.VCamera;
 
-import java.io.File;
+import com.by.communication.camera.VCamera;
 
 /**
  * Produced a lot of bug on 2017/4/1.
@@ -109,8 +108,6 @@ public class App extends MultiDexApplication {
     public void initSmallVideo(Context context)
     {
         VCamera.setVideoCachePath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Chat/videoRecord/");
-        // 开启log输出,ffmpeg输出到logcat
-        VCamera.setDebugMode(false);
         // 初始化拍摄SDK，必须
         VCamera.initialize(this);
     }

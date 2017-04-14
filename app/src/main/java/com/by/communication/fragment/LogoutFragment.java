@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
-import com.by.communication.App;
 import com.by.communication.R;
 import com.by.communication.activity.LoginActivity;
+import com.by.communication.activity.MediaRecorderActivity;
 import com.by.communication.util.Usp;
-import com.yixia.camera.demo.ui.record.MediaRecorderActivity;
 
 import butterknife.BindView;
 

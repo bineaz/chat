@@ -3,6 +3,9 @@ package com.by.communication.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.util.LruCache;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,10 +20,10 @@ import com.by.communication.entity.ChatMessage;
 import com.by.communication.gen.ChatFileDao;
 import com.by.communication.re.ObserverAdapter;
 
+import java.io.File;
 import java.util.List;
 
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -145,6 +148,71 @@ public class ImageUtil {
 
                     }
                 });
+    }
+
+    public static void displayVideoThumb(final Context context, final ImageView imageView, final ChatMessage message)
+    {
+        Observable
+                .create(new Observable.OnSubscribe<File>() {
+                    @Override
+                    public void call(Subscriber<? super File> subscriber)
+                    {
+                        String path;
+                        if (TextUtils.isEmpty(message.getLocal_root_path())) {
+                            path = ConstantUtil.VIDEO_BASE_PATH + message.getPath();
+                        } else {
+                            path = message.getLocal_root_path();
+                        }
+                        System.out.println(path);
+                        File file = new File(path);
+                        subscriber.onNext(file);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverAdapter<File>() {
+
+                    @Override
+                    public void onNext(File file)
+                    {
+                        if (file.exists()) {
+                            Glide.with(context)
+                                    .load(Uri.fromFile(file))
+                                    .asBitmap()
+                                    .into(imageView);
+                        }
+                    }
+                });
+
+
+    }
+
+    public static Bitmap getThumbnail(Context context, ChatMessage message)
+    {
+        String path;
+        if (TextUtils.isEmpty(message.getLocal_root_path())) {
+            path = ConstantUtil.VIDEO_BASE_PATH + message.getPath();
+        } else {
+            path = message.getLocal_root_path();
+        }
+
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(path);
+            bitmap = retriever.getFrameAtTime();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+        return bitmap;
     }
 
     private static Bitmap compressImage(Bitmap bitmap)

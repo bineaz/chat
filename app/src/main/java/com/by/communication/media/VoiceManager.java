@@ -470,7 +470,6 @@ public class VoiceManager {
                 voicePlayCallBack.playFinish();
             }
             Util.toast(mContext, mContext.getString(R.string.file_not_exist));
-            return;
         } else {
             playFilePath = filePath;
             startPlay(true);

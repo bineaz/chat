@@ -1,4 +1,4 @@
-package com.by.communication.util.an.compress;
+package com.by.communication.util.compress;
 
 import java.io.File;
 

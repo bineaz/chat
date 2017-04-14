@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+
+    <SurfaceView
+        android:id="@+id/recordSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <com.by.communication.widgit.view.ProgressView
+        android:id="@+id/recordProgressView"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_alignParentBottom="true"/>
+
+    <ImageView
+        android:id="@+id/recordFocusImageView"
+        android:layout_width="64dip"
+        android:layout_height="64dip"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/imageView_content_description"
+        android:src="@mipmap/focus"
+        android:visibility="gone"/>
+
+    <CheckedTextView
+        android:id="@+id/recordDeleteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="18dip"
+        android:background="@drawable/record_delete_selector"
+        android:button="@null"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/switchCameraImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        android:src="@mipmap/switch_camera"/>
+
+    <CheckBox
+        android:id="@+id/recordLedCheckBox"
+        android:layout_width="47dp"
+        android:layout_height="23dp"
+        android:layout_alignTop="@id/switchCameraImageView"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@id/switchCameraImageView"
+        android:background="@drawable/record_camera_flash_led_selector"
+        android:button="@null"
+        android:textColor="@color/white"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/recordControllerImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="53dp"
+        android:src="@drawable/video_record_start_bg"/>
+
+    <ImageView
+        android:id="@+id/cancelRecordImageView"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_margin="22dip"
+        android:contentDescription="@string/imageView_content_description"
+        android:src="@mipmap/close"/>
+</RelativeLayout>

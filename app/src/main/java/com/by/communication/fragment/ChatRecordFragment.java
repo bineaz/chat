@@ -6,19 +6,10 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.by.communication.App;
 import com.by.communication.R;
 import com.by.communication.activity.ChatActivity;
-import com.by.communication.entity.ChatMessage;
 import com.by.communication.entity.ChatRecord;
-import com.by.communication.entity.Response;
-import com.by.communication.gen.ChatMessageDao;
-import com.by.communication.re.ChatService;
-import com.by.communication.re.SubscriberAdapter;
 import com.by.communication.util.ImageUtil;
-import com.by.communication.util.Logger;
-import com.by.communication.util.RetrofitUtil;
-import com.by.communication.util.Usp;
 import com.by.communication.widgit.listView.InsetListView;
 import com.by.communication.widgit.listView.adapter.ListHolder;
 import com.by.communication.widgit.listView.adapter.SingleListAdapter;
@@ -27,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Produced a lot of bug on 2017/4/5.

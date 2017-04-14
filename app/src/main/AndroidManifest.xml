@@ -53,8 +53,7 @@
 
 
         </activity>
-        <activity android:name="com.yixia.camera.demo.ui.record.MediaRecorderActivity"/>
-        <activity android:name="com.yixia.camera.demo.ui.record.VideoPlayerActivity"/>
+        <activity android:name=".activity.MediaRecorderActivity"/>
 
 
         <service android:name=".net.PushSocketService">
