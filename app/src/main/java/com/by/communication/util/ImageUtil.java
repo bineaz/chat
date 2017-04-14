@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.by.communication.App;
@@ -37,7 +39,19 @@ public class ImageUtil {
 
     public static void displayAvatar(Context context, ImageView imageView, long user_id)
     {
-        Glide.with(context).load(R.mipmap.icon).into(imageView);
+
+        Glide.with(context)
+                .load(ConstantUtil.AVATAR_BASE_URL + user_id + ".jpg")
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+//                .into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation)
+//                    {
+//
+//                    }
+//                });
     }
 
     public static void setBitmapWithRatio(ImageView imageView, Bitmap bitmap, int width)

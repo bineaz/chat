@@ -50,7 +50,7 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     @SerializedName("message_id")
     private Long id;
 
-    private long   chat_id;   //聊天组用到
+    private long   group_id;   //聊天组用到
     private long   sender_id;   //发送者id
     private long   receiver_id;  //接受者id
     private int    content_type; //内容类型
@@ -71,7 +71,7 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     protected ChatMessage(Parcel in)
     {
         id = in.readLong();
-        chat_id = in.readLong();
+        group_id = in.readLong();
         sender_id = in.readLong();
         receiver_id = in.readLong();
         content_type = in.readInt();
@@ -105,7 +105,7 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     public void writeToParcel(Parcel parcel, int i)
     {
         parcel.writeLong(id);
-        parcel.writeLong(chat_id);
+        parcel.writeLong(group_id);
         parcel.writeLong(sender_id);
         parcel.writeLong(receiver_id);
         parcel.writeInt(content_type);
@@ -130,26 +130,6 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
 
     }
 
-    @Override
-    public String toString()
-    {
-        return "ChatMessage{" +
-                "id=" + id +
-                ", chat_id=" + chat_id +
-                ", sender_id=" + sender_id +
-                ", receiver_id=" + receiver_id +
-                ", content_type=" + content_type +
-                ", content='" + content + '\'' +
-                ", local_root_path='" + local_root_path + '\'' +
-                ", path='" + path + '\'' +
-                ", length=" + length +
-                ", visible=" + visible +
-                ", timestamp='" + timestamp + '\'' +
-                ", progress=" + progress +
-                ", download_status=" + download_status +
-                ", status=" + status +
-                '}';
-    }
 
     public ChatMessage(long id, long sender_id, long receiver_id, int content_type, String content, String file_name, int length, int status)
     {
@@ -164,13 +144,12 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
         timestamp = TimeUtil.getCurrentTimeString();
     }
 
-
-    @Generated(hash = 88233212)
-    public ChatMessage(Long id, long chat_id, long sender_id, long receiver_id, int content_type, String content, String local_root_path,
+    @Generated(hash = 1040363771)
+    public ChatMessage(Long id, long group_id, long sender_id, long receiver_id, int content_type, String content, String local_root_path,
                        String path, int length, int visible, String timestamp, int status)
     {
         this.id = id;
-        this.chat_id = chat_id;
+        this.group_id = group_id;
         this.sender_id = sender_id;
         this.receiver_id = receiver_id;
         this.content_type = content_type;
@@ -348,15 +327,15 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
     }
 
 
-    public long getChat_id()
+    public long getGroup_id()
     {
-        return this.chat_id;
+        return this.group_id;
     }
 
 
-    public void setChat_id(long chat_id)
+    public void setGroup_id(long group_id)
     {
-        this.chat_id = chat_id;
+        this.group_id = group_id;
     }
 
     public String getPath()
@@ -452,5 +431,26 @@ public class ChatMessage implements MultiItemEntity, Parcelable {
 
     public interface OnPlayListener {
         void onPlay(int time);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ChatMessage{" +
+                "id=" + id +
+                ", group_id=" + group_id +
+                ", sender_id=" + sender_id +
+                ", receiver_id=" + receiver_id +
+                ", content_type=" + content_type +
+                ", content='" + content + '\'' +
+                ", local_root_path='" + local_root_path + '\'' +
+                ", path='" + path + '\'' +
+                ", length=" + length +
+                ", visible=" + visible +
+                ", timestamp='" + timestamp + '\'' +
+                ", progress=" + progress +
+                ", download_status=" + download_status +
+                ", status=" + status +
+                '}';
     }
 }

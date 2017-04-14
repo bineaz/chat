@@ -12,7 +12,8 @@ public class ConstantUtil {
     public static final String IMAGE_BASE_URL  = "http://chat.tangcheng.me/uploads/image/";
     public static final String AUDIO_BASE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Chat/audio/";
     public static final String FILE_BASE_PATH  = Environment.getExternalStorageDirectory().getPath() + "/Chat/file/";
-    public static final String VIDEO_BASE_PATH  = Environment.getExternalStorageDirectory().getPath() + "/Chat/videoRecord/";
+    public static final String VIDEO_BASE_PATH = Environment.getExternalStorageDirectory().getPath() + "/Chat/videoRecord/";
     public static final String AUDIO_BASE_URL  = "http://chat.tangcheng.me/uploads/audio/";
     public static final String FILE_BASE_URL   = "http://chat.tangcheng.me/uploads/file/";
+    public static final String AVATAR_BASE_URL = "http://chat.tangcheng.me/uploads/avatar/";
 }

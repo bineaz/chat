@@ -33,6 +33,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.by.communication.util.GlideCache"
+            android:value="GlideModule"/>
 
         <activity
             android:name=".activity.SplashActivity"
